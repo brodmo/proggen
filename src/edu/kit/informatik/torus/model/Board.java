@@ -1,10 +1,10 @@
 package edu.kit.informatik.torus.model;
 
-import edu.kit.informatik.Terminal;
+import java.util.Collection;
+import java.util.Deque;
+import java.util.LinkedList;
 
-import java.util.*;
-
-public abstract class Board {
+abstract class Board {
 
     public static final char EMPTY_BOARD_CHAR = '#';
 
@@ -13,7 +13,7 @@ public abstract class Board {
 
     private Token[][] board = new Token[BOARD_SIZE][BOARD_SIZE];
 
-    public String rowToString(int row) throws RuleException {
+    String rowToString(int row) throws RuleException {
         checkRow(row);
         StringBuilder sb = new StringBuilder();
         for (int col = 0; col < BOARD_SIZE; col++) {
@@ -27,7 +27,7 @@ public abstract class Board {
         return sb.substring(0, sb.length() - 1);
     }
 
-    public String colToString(int col) throws RuleException {
+    String colToString(int col) throws RuleException {
         checkCol(col);
         StringBuilder sb = new StringBuilder();
         for (int row = 0; row < BOARD_SIZE; row++) {
@@ -58,15 +58,16 @@ public abstract class Board {
         checkCol(pos.col());
     }
 
-    void place(Position pos, Token token) throws RuleException {
+    boolean place(Position pos, Token token) throws RuleException {
         Position transformed = transform(pos);
         checkPos(transformed); // a tad hacky, todo think of better solution
         int row = transformed.row();
         int col = transformed.col();
         if (board[row][col] != null) {
-            throw new RuleException("cannot place token on non-empty field");
+            return false;
         }
         board[row][col] = token;
+        return true;
     }
 
 
@@ -99,22 +100,11 @@ public abstract class Board {
     // start, end inclusive
     private boolean winningStateIteration(int rowStartIndex, int rowEndIndex, int rowChange,
                                          int colStartIndex, int colEndIndex, int colChange) {
-        /*
-        Terminal.printLine(rowStartIndex);
-        Terminal.printLine(rowEndIndex);
-        Terminal.printLine(rowChange);
-        Terminal.printLine(colStartIndex);
-        Terminal.printLine(colEndIndex);
-        Terminal.printLine(colChange);
-        */
         Deque<Token> lastFour = new LinkedList<>();
         int row = rowStartIndex;
         int col = colStartIndex;
         do {
             Position transformed = transform(new Position(row, col));
-
-            // Terminal.printLine(transformed.row());
-            // Terminal.printLine(transformed.col());
             lastFour.addFirst(board[transformed.row()][transformed.col()]);
             if (lastFour.size() >= NEEDED_TO_WIN) {
                 if (shareAttribute(lastFour)) {
@@ -124,7 +114,6 @@ public abstract class Board {
             }
             row += rowChange;
             col += colChange;
-            // Terminal.printLine("");
         } while (row - rowChange != rowEndIndex && col - colChange!= colEndIndex);
         return false;
     }

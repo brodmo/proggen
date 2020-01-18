@@ -1,7 +1,5 @@
 package edu.kit.informatik.torus.model;
 
-import edu.kit.informatik.Terminal;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -43,18 +41,14 @@ public class Game {
         if (currentToken == null) {
             throw new RuleException("no token has been selected");
         }
-        try {
-            board.place(pos, currentToken);
-        } catch (RuleException e) {
+        if (!board.place(pos, currentToken)) {
             availableTokens.put(currentToken, availableTokens.get(currentToken) + 1);
             currentToken = null;
-            throw e;
+            throw new RuleException("cannot place token on non-empty field");
         }
         playerWhoPlaced = playerWhoPlaced % 2 + 1;
         currentToken = null;
-        Set<Integer> zeroSet = new HashSet<>();
-        zeroSet.add(0);
-        if (new HashSet<>(availableTokens.values()).equals(zeroSet)) {
+        if (noMoreTokens()) {
             outOfTokens = true;
             finished = true;
         }
@@ -64,6 +58,12 @@ public class Game {
             finished = true;
         }
         return won;
+    }
+
+    private boolean noMoreTokens() {
+        Set<Integer> zeroSet = new HashSet<>();
+        zeroSet.add(0);
+        return new HashSet<>(availableTokens.values()).equals(zeroSet);
     }
 
     public int getCounter() {
@@ -99,7 +99,17 @@ public class Game {
         return board != null;
     }
 
-    public Set<Token> getAvailable() {
+    public String getAvailable() {
+        Set<Token> available = getAvailableIntern();
+        StringBuilder sb = new StringBuilder();
+        for (Token token: available) {
+            sb.append(token.toNumber());
+            sb.append(" ");
+        }
+        return sb.substring(0, sb.length() - 1);
+    }
+
+    private Set<Token> getAvailableIntern() {
         Set<Token> available = new HashSet<>();
         for (int i = 0; i < NUMBER_OF_TOKENS; i++) {
             Token token = Token.numberToToken(i);

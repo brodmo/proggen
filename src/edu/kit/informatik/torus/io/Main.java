@@ -4,7 +4,7 @@ import edu.kit.informatik.Terminal;
 import edu.kit.informatik.torus.model.Game;
 import edu.kit.informatik.torus.model.RuleException;
 
-public class Main {
+public final class Main {
 
     // WS19/20 ÜB5 A1
     public static void main(String[] args) {

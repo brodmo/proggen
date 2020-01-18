@@ -1,6 +1,10 @@
 package edu.kit.informatik.torus.io;
 
-import edu.kit.informatik.torus.model.*;
+import edu.kit.informatik.torus.model.BoardType;
+import edu.kit.informatik.torus.model.Game;
+import edu.kit.informatik.torus.model.RuleException;
+import edu.kit.informatik.torus.model.Token;
+import edu.kit.informatik.torus.model.Position;
 
 import java.util.Set;
 
@@ -39,13 +43,7 @@ public enum Command {
         @Override
         String execute(String argument, Game game) throws ParseException, RuleException {
             checkNoArgument(argument);
-            Set<Token> available = game.getAvailable();
-            StringBuilder sb = new StringBuilder();
-            for (Token token: available) {
-                sb.append(token.toNumber());
-                sb.append(" ");
-            }
-            return sb.substring(0, sb.length() - 1);
+            return game.getAvailable();
         }
     },
     PRINT_ROW("rowprint") {
