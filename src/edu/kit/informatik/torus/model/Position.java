@@ -1,7 +1,4 @@
-package edu.kit.informatik.WS1920_ÜB5A1_game.model;
-
-import static edu.kit.informatik.WS1920_ÜB5A1_game.model.Board.BOARD_ROWS;
-import static edu.kit.informatik.WS1920_ÜB5A1_game.model.Board.BOARD_COLS;
+package edu.kit.informatik.torus.model;
 
 public class Position {
     private final int row;

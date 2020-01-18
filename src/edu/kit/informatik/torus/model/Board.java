@@ -1,22 +1,22 @@
-package edu.kit.informatik.WS1920_ÜB5A1_game.model;
+package edu.kit.informatik.torus.model;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import edu.kit.informatik.Terminal;
+
+import java.util.*;
 
 public abstract class Board {
 
     public static final char EMPTY_BOARD_CHAR = '#';
 
-    public static final int BOARD_ROWS = 6;
-    public static final int BOARD_COLS = 6;
+    public static final int BOARD_SIZE = 6; // assumes quadratic board
     public static final int NEEDED_TO_WIN = 4;
 
-    private Token[][] board = new Token[BOARD_ROWS][BOARD_COLS];
+    private Token[][] board = new Token[BOARD_SIZE][BOARD_SIZE];
 
     public String rowToString(int row) throws RuleException {
         checkRow(row);
         StringBuilder sb = new StringBuilder();
-        for (int col = 0; col < BOARD_COLS; col++) {
+        for (int col = 0; col < BOARD_SIZE; col++) {
             if (board[row][col] == null) {
                 sb.append(EMPTY_BOARD_CHAR);
             } else {
@@ -30,7 +30,7 @@ public abstract class Board {
     public String colToString(int col) throws RuleException {
         checkCol(col);
         StringBuilder sb = new StringBuilder();
-        for (int row = 0; row < BOARD_COLS; row++) {
+        for (int row = 0; row < BOARD_SIZE; row++) {
             if (board[row][col] == null) {
                 sb.append(EMPTY_BOARD_CHAR);
             } else {
@@ -42,13 +42,13 @@ public abstract class Board {
     }
 
     private void checkRow(int row) throws RuleException {
-        if (row < 0 | row > BOARD_ROWS) {
+        if (row < 0 | row > BOARD_SIZE) {
             throw new RuleException("invalid row");
         }
     }
 
     private void checkCol(int col) throws RuleException {
-        if (col < 0 | col > BOARD_COLS) {
+        if (col < 0 | col > BOARD_SIZE) {
             throw new RuleException("invalid col");
         }
     }
@@ -70,53 +70,72 @@ public abstract class Board {
     }
 
 
-    public boolean winningState() {
+    // you better disable parameter hints for this:
+    // https://stackoverflow.com/questions/40866202/
+    // intellij-shows-method-parameter-hints-on-usage-how-to-disable-it
+    boolean winningState() {
+        int max = BOARD_SIZE - 1;
+        int boundsOffset = getBoundsOffset();
+        for (int i = -boundsOffset; i < BOARD_SIZE + boundsOffset; i++) {
+            if (winningStateIteration(i, i + 1, 0,
+                    -boundsOffset, max + boundsOffset, 1) // cols
+                || winningStateIteration(-boundsOffset, max + boundsOffset, 1,
+                    i, i + 1, 0) // rows
+                || winningStateIteration(i, max + boundsOffset, 1,
+                    -boundsOffset, max - i, 1) // diagonal 1, down left half
+                || winningStateIteration(-boundsOffset, max - i, 1,
+                    i, max + boundsOffset, 1) // diagonal 1, upper right half
+                || winningStateIteration(max - i, -boundsOffset, -1,
+                    -boundsOffset, max - i, 1) // diagonal 2, top left half
+                || winningStateIteration(max + boundsOffset, i, -1,
+                    i, max + boundsOffset, 1) // diagonal 2, down right half
+            ) {
+                return true;
+            }
+        }
         return false;
     }
 
-    /*
-    public boolean winningState() {
-        int boundsOffset = getBoundsOffset();
-        return winningStateIteration(-boundsOffset, -boundsOffset,
-                        BOARD_ROWS + boundsOffset, BOARD_COLS + boundsOffset,
-                        0, 0)
-                || winningStateIteration(-boundsOffset, -boundsOffset,
-                        BOARD_ROWS + boundsOffset, BOARD_COLS + boundsOffset,
-                        0, 1)
-                || winningStateIteration(-boundsOffset, -boundsOffset,
-                BOARD_ROWS + boundsOffset, BOARD_COLS + boundsOffset,
-                1, 0)
-                || winningStateIteration(-boundsOffset, -BOARD_COLS + boundsOffset,
-                BOARD_ROWS + boundsOffset, -boundsOffset - 1,
-                1, -1);
-
-    }
-
-    public boolean winningStateIteration(int rowStartIndex, int colStartIndex,
-                                         int rowEndIndex, int colEndIndex,
-                                         int rowChange, int colChange) {
-        ArrayList<Token> lastFour = new ArrayList<>();
+    // start, end inclusive
+    private boolean winningStateIteration(int rowStartIndex, int rowEndIndex, int rowChange,
+                                         int colStartIndex, int colEndIndex, int colChange) {
+        /*
+        Terminal.printLine(rowStartIndex);
+        Terminal.printLine(rowEndIndex);
+        Terminal.printLine(rowChange);
+        Terminal.printLine(colStartIndex);
+        Terminal.printLine(colEndIndex);
+        Terminal.printLine(colChange);
+        */
+        Deque<Token> lastFour = new LinkedList<>();
         int row = rowStartIndex;
         int col = colStartIndex;
-        while (row != rowEndIndex && col != colEndIndex) {
+        do {
             Position transformed = transform(new Position(row, col));
-            lastFour.add(board[transformed.row()][transformed.col()]);
-            if (shareAttribute(lastFour)) {
-                return true;
+
+            // Terminal.printLine(transformed.row());
+            // Terminal.printLine(transformed.col());
+            lastFour.addFirst(board[transformed.row()][transformed.col()]);
+            if (lastFour.size() >= NEEDED_TO_WIN) {
+                if (shareAttribute(lastFour)) {
+                    return true;
+                }
+                lastFour.removeLast();
             }
             row += rowChange;
             col += colChange;
-        }
+            // Terminal.printLine("");
+        } while (row - rowChange != rowEndIndex && col - colChange!= colEndIndex);
         return false;
     }
-    */
+
 
     private boolean shareAttribute(Collection<Token> lastFour) {
-        if (lastFour.size() < NEEDED_TO_WIN) {
-            return false;
-        }
         int[] counters = new int[4]; // number of attributes, magic number, sue me
         for (Token token: lastFour) {
+            if (token == null) {
+                return false;
+            }
             if (token.color()) {
                 counters[0]++;
             }

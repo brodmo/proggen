@@ -1,15 +1,16 @@
-package edu.kit.informatik.SS19_AB1_complex.IO;
+package edu.kit.informatik.complex.IO;
 
 import edu.kit.informatik.Terminal;
-import edu.kit.informatik.SS19_AB1_complex.MagicStrings;
-import edu.kit.informatik.SS19_AB1_complex.model.ComplexNumber;
-import edu.kit.informatik.SS19_AB1_complex.model.DivideByZeroException;
-import edu.kit.informatik.SS19_AB1_complex.model.VariableManager;
-import edu.kit.informatik.SS19_AB1_complex.parsing.ParseException;
-import edu.kit.informatik.SS19_AB1_complex.parsing.Parser;
+import edu.kit.informatik.complex.MagicStrings;
+import edu.kit.informatik.complex.model.ComplexNumber;
+import edu.kit.informatik.complex.model.DivideByZeroException;
+import edu.kit.informatik.complex.model.VariableManager;
+import edu.kit.informatik.complex.parsing.ParseException;
+import edu.kit.informatik.complex.parsing.Parser;
 
 public class Main {
 
+    // SS19 Abschluss 1
     public static void main(String[] args) {
         VariableManager vm = new VariableManager();
         String input = Terminal.readLine();
@@ -31,7 +32,7 @@ public class Main {
             } catch (InvalidInputException e) {
                 Terminal.printError("invalid input: " + e.getMessage());
             } catch (ParseException e) {
-                String messageBegin = "couldn't parse SS19_AB1_complex number";
+                String messageBegin = "couldn't parse complex number";
                 if (e.getMessage() == null) {
                     Terminal.printError(messageBegin);
                 } else {

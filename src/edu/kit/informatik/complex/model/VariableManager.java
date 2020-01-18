@@ -1,4 +1,4 @@
-package edu.kit.informatik.SS19_AB1_complex.model;
+package edu.kit.informatik.complex.model;
 
 import java.util.HashMap;
 import java.util.Map;

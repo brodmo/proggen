@@ -1,6 +1,6 @@
-package edu.kit.informatik.SS19_AB1_complex.model;
+package edu.kit.informatik.complex.model;
 
-import edu.kit.informatik.SS19_AB1_complex.MagicStrings;
+import edu.kit.informatik.complex.MagicStrings;
 
 import java.util.Objects;
 

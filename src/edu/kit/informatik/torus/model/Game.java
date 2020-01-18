@@ -1,4 +1,6 @@
-package edu.kit.informatik.WS1920_ÜB5A1_game.model;
+package edu.kit.informatik.torus.model;
+
+import edu.kit.informatik.Terminal;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,7 +13,7 @@ public class Game {
 
     // is null periodically
     private Token currentToken;
-    private int placingPlayer;
+    private int playerWhoPlaced;
     private Board board;
     private Map<Token, Integer> availableTokens;
     private int counter;
@@ -23,10 +25,10 @@ public class Game {
     }
 
     public void reset() {
-        placingPlayer = 2;
+        playerWhoPlaced = 1;
         currentToken = null;
         board = null;
-        counter = 0;
+        counter = -1;
         availableTokens = new HashMap<>();
         finished = false;
         outOfTokens = false;
@@ -48,7 +50,7 @@ public class Game {
             currentToken = null;
             throw e;
         }
-        placingPlayer = placingPlayer % 2 + 1;
+        playerWhoPlaced = playerWhoPlaced % 2 + 1;
         currentToken = null;
         Set<Integer> zeroSet = new HashSet<>();
         zeroSet.add(0);
@@ -63,12 +65,17 @@ public class Game {
         }
         return won;
     }
+
+    public int getCounter() {
+        return counter;
+    }
+
     public boolean outOfTokens() {
         return outOfTokens;
     }
 
-    public int getPlacingPlayer() {
-        return placingPlayer;
+    public int getPlayerWhoPlaced() {
+        return playerWhoPlaced;
     }
 
     public void take(Token token) throws RuleException {

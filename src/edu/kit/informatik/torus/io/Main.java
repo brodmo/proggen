@@ -1,11 +1,12 @@
-package edu.kit.informatik.WS1920_ÜB5A1_game.io;
+package edu.kit.informatik.torus.io;
 
 import edu.kit.informatik.Terminal;
-import edu.kit.informatik.WS1920_ÜB5A1_game.model.Game;
-import edu.kit.informatik.WS1920_ÜB5A1_game.model.RuleException;
+import edu.kit.informatik.torus.model.Game;
+import edu.kit.informatik.torus.model.RuleException;
 
 public class Main {
 
+    // WS19/20 ÜB5 A1
     public static void main(String[] args) {
         Game game = new Game();
         String input = Terminal.readLine();
@@ -13,7 +14,7 @@ public class Main {
             try {
                 String[] split = input.split(" ", -1);
                 if (split.length > 2) {
-                    throw new IoException("at most one space allowed");
+                    throw new ParseException("at most one space allowed");
                 }
                 String commandStr = split[0];
                 String argument = split.length == 1 ? "" : split[1];
@@ -28,7 +29,7 @@ public class Main {
                 }
             } catch (RuleException e) {
                 Terminal.printError("you broke the rules: " + e.getMessage());
-            } catch (IoException e) {
+            } catch (ParseException e) {
                 Terminal.printError("couldn't parse input: " + e.getMessage());
             }
             input = Terminal.readLine();

@@ -1,4 +1,4 @@
-package edu.kit.informatik.WS1920_ÜB5A1_game.model;
+package edu.kit.informatik.torus.model;
 
 public class RuleException extends Exception {
 

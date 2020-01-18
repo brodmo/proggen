@@ -1,19 +1,15 @@
-package edu.kit.informatik.WS1920_ÜB5A1_game.io;
+package edu.kit.informatik.torus.io;
 
-import edu.kit.informatik.Terminal;
-import edu.kit.informatik.WS1920_ÜB5A1_game.model.*;
+import edu.kit.informatik.torus.model.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 
-import static edu.kit.informatik.WS1920_ÜB5A1_game.model.Game.NUMBER_OF_TOKENS;
+import static edu.kit.informatik.torus.model.Game.NUMBER_OF_TOKENS;
 
 public enum Command {
     START("start") {
         @Override
-        String execute(String argument, Game game) throws IoException, RuleException {
+        String execute(String argument, Game game) throws ParseException, RuleException {
             BoardType boardType = parseBoardType(argument);
             game.reset();
             game.setBoardType(boardType);
@@ -22,16 +18,16 @@ public enum Command {
     },
     SELECT("select") {
         @Override
-        String execute(String argument, Game game) throws IoException, RuleException {
+        String execute(String argument, Game game) throws ParseException, RuleException {
             game.take(parseToken(argument));
             return OK;
         }
     },
     PLACE("place") {
         @Override
-        String execute(String argument, Game game) throws IoException, RuleException {
+        String execute(String argument, Game game) throws ParseException, RuleException {
             if (game.place(parsePosition(argument))) {
-                return "P" + game.getPlacingPlayer() + " wins";
+                return "P" + game.getPlayerWhoPlaced() + " wins\n" + game.getCounter();
             } else if (game.outOfTokens()) {
                 return "draw";
             } else {
@@ -41,7 +37,8 @@ public enum Command {
     },
     BAG("bag") {
         @Override
-        String execute(String argument, Game game) throws IoException, RuleException {
+        String execute(String argument, Game game) throws ParseException, RuleException {
+            checkNoArgument(argument);
             Set<Token> available = game.getAvailable();
             StringBuilder sb = new StringBuilder();
             for (Token token: available) {
@@ -53,28 +50,28 @@ public enum Command {
     },
     PRINT_ROW("rowprint") {
         @Override
-        String execute(String argument, Game game) throws IoException, RuleException {
+        String execute(String argument, Game game) throws ParseException, RuleException {
             return game.rowToString(parseInt(argument));
         }
     },
     PRINT_COL("colprint") {
         @Override
-        String execute(String argument, Game game) throws IoException, RuleException {
+        String execute(String argument, Game game) throws ParseException, RuleException {
             return game.colToString(parseInt(argument));
         }
     };
 
-    public static Command matchCommand(String command) throws IoException {
+    public static Command matchCommand(String command) throws ParseException {
         for (Command cmd: Command.values()) {
             if (cmd.toString().equals(command)) {
                 return cmd;
             }
         }
-        throw new IoException("no command of this name found");
+        throw new ParseException("no command of this name found");
     }
 
     public static final String COORDINATE_SEPERATOR = ";";
-    abstract String execute(String argument, Game game) throws IoException, RuleException;
+    abstract String execute(String argument, Game game) throws ParseException, RuleException;
 
     public static final String OK = "OK";
 
@@ -84,46 +81,52 @@ public enum Command {
         this.string = string;
     }
 
+    private static void checkNoArgument(String argument) throws ParseException {
+        if (!argument.isEmpty()) {
+            throw new ParseException("unexpected argument");
+        }
+    }
+
     @Override
     public String toString() {
         return string;
     }
 
-    private static int parseInt(String argument) throws IoException {
+    private static int parseInt(String argument) throws ParseException {
         try {
             return Integer.parseInt(argument);
         } catch (NumberFormatException e) {
-            throw new IoException("could not parse number describing token");
+            throw new ParseException("could not parse number describing token");
         }
     }
 
-    private static BoardType parseBoardType(String argument) throws IoException {
+    private static BoardType parseBoardType(String argument) throws ParseException {
         if (argument.equals("standard")) {
             return BoardType.STANDARD;
         } else if (argument.equals("torus")) {
             return BoardType.TORUS;
         } else {
-            throw new IoException("unknown board type");
+            throw new ParseException("unknown board type");
         }
     }
 
-    private static Token parseToken(String argument) throws IoException {
+    private static Token parseToken(String argument) throws ParseException {
         int number;
         try {
             number = Integer.parseInt(argument);
         } catch (NumberFormatException e) {
-            throw new IoException("could not parse number describing token");
+            throw new ParseException("could not parse number describing token");
         }
         if (number < 0 || number > NUMBER_OF_TOKENS) {
-            throw new IoException("invalid number describing token");
+            throw new ParseException("invalid number describing token");
         }
         return Token.numberToToken(number);
     }
 
-    private static Position parsePosition(String argument) throws IoException {
+    private static Position parsePosition(String argument) throws ParseException {
         String[] split = argument.split(COORDINATE_SEPERATOR, -1);
         if (split.length != 2) {
-            throw new IoException("not exactly 2 coordinates specified");
+            throw new ParseException("not exactly 2 coordinates specified");
         }
         int row;
         int col;
@@ -131,7 +134,7 @@ public enum Command {
             row = Integer.parseInt(split[0]);
             col = Integer.parseInt(split[1]);
         } catch (NumberFormatException e) {
-            throw new IoException("could not parse coordinates");
+            throw new ParseException("could not parse coordinates");
         }
         return new Position(row, col);
     }

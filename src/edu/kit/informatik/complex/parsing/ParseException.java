@@ -1,4 +1,4 @@
-package edu.kit.informatik.SS19_AB1_complex.parsing;
+package edu.kit.informatik.complex.parsing;
 
 public class ParseException extends Exception {
 

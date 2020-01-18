@@ -1,4 +1,4 @@
-package edu.kit.informatik.SS19_AB1_complex;
+package edu.kit.informatik.complex;
 
 import java.util.Arrays;
 import java.util.HashSet;

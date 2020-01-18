@@ -1,7 +1,7 @@
-package edu.kit.informatik.SS19_AB1_complex.parsing;
+package edu.kit.informatik.complex.parsing;
 
-import edu.kit.informatik.SS19_AB1_complex.MagicStrings;
-import edu.kit.informatik.SS19_AB1_complex.model.*;
+import edu.kit.informatik.complex.MagicStrings;
+import edu.kit.informatik.complex.model.*;
 
 import java.util.HashMap;
 import java.util.Map;
