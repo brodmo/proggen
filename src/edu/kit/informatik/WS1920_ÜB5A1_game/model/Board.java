@@ -69,19 +69,25 @@ public abstract class Board {
         board[row][col] = token;
     }
 
+
+    public boolean winningState() {
+        return false;
+    }
+
+    /*
     public boolean winningState() {
         int boundsOffset = getBoundsOffset();
         return winningStateIteration(-boundsOffset, -boundsOffset,
-                        BOARD_ROWS + boundsOffset + 1, BOARD_COLS + boundsOffset + 1,
+                        BOARD_ROWS + boundsOffset, BOARD_COLS + boundsOffset,
                         0, 0)
                 || winningStateIteration(-boundsOffset, -boundsOffset,
-                        BOARD_ROWS + boundsOffset + 1, BOARD_COLS + boundsOffset + 1,
+                        BOARD_ROWS + boundsOffset, BOARD_COLS + boundsOffset,
                         0, 1)
                 || winningStateIteration(-boundsOffset, -boundsOffset,
-                BOARD_ROWS + boundsOffset + 1, BOARD_COLS + boundsOffset + 1,
+                BOARD_ROWS + boundsOffset, BOARD_COLS + boundsOffset,
                 1, 0)
                 || winningStateIteration(-boundsOffset, -BOARD_COLS + boundsOffset,
-                BOARD_ROWS + boundsOffset + 1, -boundsOffset - 1,
+                BOARD_ROWS + boundsOffset, -boundsOffset - 1,
                 1, -1);
 
     }
@@ -103,6 +109,7 @@ public abstract class Board {
         }
         return false;
     }
+    */
 
     private boolean shareAttribute(Collection<Token> lastFour) {
         if (lastFour.size() < NEEDED_TO_WIN) {
