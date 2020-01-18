@@ -9,11 +9,11 @@ public class Position {
         this.col = col;
     }
 
-    public int row() {
+    int row() {
         return row;
     }
 
-    public int col() {
+    int col() {
         return col;
     }
 }

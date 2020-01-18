@@ -1,8 +1,8 @@
 package edu.kit.informatik.torus.io;
 
-public class ParseException extends Exception {
+class ParseException extends Exception {
 
-    public ParseException(String message) {
+    ParseException(String message) {
         super(message);
     }
 }

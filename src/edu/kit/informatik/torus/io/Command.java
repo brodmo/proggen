@@ -6,8 +6,6 @@ import edu.kit.informatik.torus.model.RuleException;
 import edu.kit.informatik.torus.model.Token;
 import edu.kit.informatik.torus.model.Position;
 
-import java.util.Set;
-
 import static edu.kit.informatik.torus.model.Game.NUMBER_OF_TOKENS;
 
 public enum Command {

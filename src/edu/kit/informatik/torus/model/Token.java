@@ -11,7 +11,7 @@ public class Token {
     private boolean size;
     private boolean fullness;
 
-    public Token(boolean color, boolean shape, boolean size, boolean fullness) {
+    private Token(boolean color, boolean shape, boolean size, boolean fullness) {
         this.color = color;
         this.shape = shape;
         this.size = size;
@@ -26,23 +26,7 @@ public class Token {
         return new Token(color, shape, size, fullness);
     }
 
-    public boolean color() {
-        return color;
-    }
-
-    public boolean shape() {
-        return shape;
-    }
-
-    public boolean size() {
-        return size;
-    }
-
-    public boolean fullness() {
-        return fullness;
-    }
-
-    public int toNumber() {
+    int toNumber() {
         int number = 0;
         if (color) {
             number += 8;
@@ -57,6 +41,22 @@ public class Token {
             number += 1;
         }
         return number;
+    }
+
+    boolean color() {
+        return color;
+    }
+
+    boolean shape() {
+        return shape;
+    }
+
+    boolean size() {
+        return size;
+    }
+
+    boolean fullness() {
+        return fullness;
     }
 
     @Override

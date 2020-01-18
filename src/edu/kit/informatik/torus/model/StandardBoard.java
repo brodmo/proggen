@@ -3,7 +3,7 @@ package edu.kit.informatik.torus.model;
 class StandardBoard extends Board {
 
     @Override
-    public Position transform(Position pos) {
+    Position transform(Position pos) {
         return pos;
     }
 

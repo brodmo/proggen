@@ -61,9 +61,12 @@ public class Game {
     }
 
     private boolean noMoreTokens() {
-        Set<Integer> zeroSet = new HashSet<>();
-        zeroSet.add(0);
-        return new HashSet<>(availableTokens.values()).equals(zeroSet);
+        for (int i: availableTokens.values()) {
+            if (i != 0) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public int getCounter() {
