@@ -1,72 +1,36 @@
 package edu.kit.informatik.connectfour.model;
 
+import java.util.Collections;
 import java.util.Objects;
+import java.util.Set;
+
+import static edu.kit.informatik.connectfour.model.AttributeValue.attributesToNumber;
+import static edu.kit.informatik.connectfour.model.AttributeValue.getAttributes;
 
 public class Token {
-    // no time for enum lol
-    // schwarz = false, eckig = false, klein = false, hohl = false
 
-    private boolean color;
-    private boolean shape;
-    private boolean size;
-    private boolean fullness;
+    private Set<AttributeValue> attributes;
 
-    private Token(boolean color, boolean shape, boolean size, boolean fullness) {
-        this.color = color;
-        this.shape = shape;
-        this.size = size;
-        this.fullness = fullness;
+    public Token(int number) {
+        attributes = getAttributes(number);
     }
 
-    public static Token numberToToken(int number) {
-        boolean color = (number / 8) % 2 != 0; // totally not a magic number :')
-        boolean shape = (number / 4) % 2 != 0;
-        boolean size = (number / 2) % 2 != 0;
-        boolean fullness = number  % 2 != 0;
-        return new Token(color, shape, size, fullness);
+    private Token(Set<AttributeValue> attributes) {
+        this.attributes = attributes;
     }
 
-    int toNumber() {
-        int number = 0;
-        if (color) {
-            number += 8;
-        }
-        if (shape) {
-            number += 4;
-        }
-        if (size) {
-            number += 2;
-        }
-        if (fullness) {
-            number += 1;
-        }
-        return number;
-    }
-
-    boolean color() {
-        return color;
-    }
-
-    boolean shape() {
-        return shape;
-    }
-
-    boolean size() {
-        return size;
-    }
-
-    boolean fullness() {
-        return fullness;
+    Set<AttributeValue> attributes() {
+        return Collections.unmodifiableSet(attributes);
     }
 
     @Override
     public String toString() {
-        return String.valueOf(toNumber());
+        return Integer.toString(attributesToNumber(attributes));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(color, shape, size, fullness);
+        return Objects.hash(attributes);
     }
 
     @Override
@@ -78,10 +42,6 @@ public class Token {
             return false;
         }
         Token token = (Token) obj;
-        return color == token.color
-                && shape == token.shape
-                && size == token.size
-                && fullness == token.fullness;
-
+        return attributes.equals(token.attributes);
     }
 }

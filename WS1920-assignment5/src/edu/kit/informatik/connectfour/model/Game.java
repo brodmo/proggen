@@ -31,7 +31,7 @@ public class Game {
         finished = false;
         outOfTokens = false;
         for (int i = 0; i < NUMBER_OF_TOKENS; i++) {
-            availableTokens.put(Token.numberToToken(i), 1);
+            availableTokens.put(new Token(i), 1);
         }
     }
 
@@ -113,7 +113,7 @@ public class Game {
     private Set<Token> getAvailableIntern() {
         Set<Token> available = new HashSet<>();
         for (int i = 0; i < NUMBER_OF_TOKENS; i++) {
-            Token token = Token.numberToToken(i);
+            Token token = new Token(i);
             if (availableTokens.get(token) > 0){
                 available.add(token);
             }

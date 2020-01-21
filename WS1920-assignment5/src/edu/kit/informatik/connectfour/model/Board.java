@@ -62,18 +62,18 @@ public abstract class Board {
         int boundsOffset = getBoundsOffset();
         for (int i = -boundsOffset; i < BOARD_SIZE + boundsOffset; i++) {
             BoardLine[] linesToCheck = {
-                    // cols
-                    new BoardLine(this::posInBounds, new Position(i, -boundsOffset), 0, 1),
-                    // rows
-                    new BoardLine(this::posInBounds, new Position(-boundsOffset, i), 1, 0),
-                    // diagonal 1, lower left half of the board
-                    new BoardLine(this::posInBounds, new Position(i, -boundsOffset), 1, 1),
-                    // diagonal 1, upper right half of the board
-                    new BoardLine(this::posInBounds, new Position(-boundsOffset, i), 1, 1),
-                    // diagonal 2, top left half of the board
-                    new BoardLine(this::posInBounds, new Position(max - i, -boundsOffset), -1, 1),
-                    // diagonal 2, down right half of the board
-                    new BoardLine(this::posInBounds, new Position(max + boundsOffset, i), -1, 1),
+                    new BoardLine(this::posInBounds, // cols
+                            new Position(i, -boundsOffset), 0, 1),
+                    new BoardLine(this::posInBounds, // rows
+                            new Position(-boundsOffset, i), 1, 0),
+                    new BoardLine(this::posInBounds, // diagonal 1, lower left half of the board
+                            new Position(i, -boundsOffset), 1, 1),
+                    new BoardLine(this::posInBounds, // diagonal 1, upper right half of the board
+                            new Position(-boundsOffset, i), 1, 1),
+                    new BoardLine(this::posInBounds, // diagonal 2, top left half of the board
+                            new Position(max - i, -boundsOffset), -1, 1),
+                    new BoardLine(this::posInBounds, // diagonal 2, down right half of the board
+                            new Position(max + boundsOffset, i), -1, 1),
             };
             if (winningStateIteration(linesToCheck)) {
                 return true;
@@ -100,31 +100,12 @@ public abstract class Board {
     }
 
 
-    private boolean shareAttribute(Collection<Token> lastFour) {
-        int[] counters = new int[4]; // number of attributes, magic number, sue me
-        for (Token token: lastFour) {
-            if (token == null) {
-                return false;
-            }
-            if (token.color()) {
-                counters[0]++;
-            }
-            if (token.shape()) {
-                counters[1]++;
-            }
-            if (token.size()) {
-                counters[2]++;
-            }
-            if (token.fullness()) {
-                counters[3]++;
-            }
+    private boolean shareAttribute(Deque<Token> tokens) {
+        Set<AttributeValue> commonAttributes = tokens.pop().attributes();
+        for (Token tkn: tokens) {
+            commonAttributes.retainAll(tkn.attributes());
         }
-        for (int i: counters) {
-            if (i == NEEDED_TO_WIN || i == 0) {
-                return true;
-            }
-        }
-        return false;
+        return !commonAttributes.isEmpty();
     }
 
     private void checkCoordinate(int coord) throws RuleException {

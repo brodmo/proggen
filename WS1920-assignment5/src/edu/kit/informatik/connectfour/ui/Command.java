@@ -110,10 +110,10 @@ public enum Command {
         } catch (NumberFormatException e) {
             throw new ParseException("could not parse number describing token");
         }
-        if (number < 0 || number > NUMBER_OF_TOKENS) {
+        if (number < 0 || number >= NUMBER_OF_TOKENS) {
             throw new ParseException("invalid number describing token");
         }
-        return Token.numberToToken(number);
+        return new Token(number);
     }
 
     private static Position parsePosition(String argument) throws ParseException {
