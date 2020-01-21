@@ -1,4 +1,4 @@
-package edu.kit.informatik.complex.IO;
+package edu.kit.informatik.complex.ui;
 
 class InvalidInputException extends Exception {
     InvalidInputException(String message) {

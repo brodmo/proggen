@@ -1,12 +1,12 @@
-package edu.kit.informatik.torus.io;
+package edu.kit.informatik.connectfour.ui;
 
-import edu.kit.informatik.torus.model.BoardType;
-import edu.kit.informatik.torus.model.Game;
-import edu.kit.informatik.torus.model.RuleException;
-import edu.kit.informatik.torus.model.Token;
-import edu.kit.informatik.torus.model.Position;
+import edu.kit.informatik.connectfour.model.BoardType;
+import edu.kit.informatik.connectfour.model.Game;
+import edu.kit.informatik.connectfour.model.RuleException;
+import edu.kit.informatik.connectfour.model.Token;
+import edu.kit.informatik.connectfour.model.Position;
 
-import static edu.kit.informatik.torus.model.Game.NUMBER_OF_TOKENS;
+import static edu.kit.informatik.connectfour.model.Game.NUMBER_OF_TOKENS;
 
 public enum Command {
     START("start") {
@@ -99,7 +99,7 @@ public enum Command {
     private static BoardType parseBoardType(String argument) throws ParseException {
         if (argument.equals("standard")) {
             return BoardType.STANDARD;
-        } else if (argument.equals("torus")) {
+        } else if (argument.equals("connectfour")) {
             return BoardType.TORUS;
         } else {
             throw new ParseException("unknown board type");

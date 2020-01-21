@@ -1,4 +1,4 @@
-package edu.kit.informatik.complex.IO;
+package edu.kit.informatik.complex.ui;
 
 import edu.kit.informatik.Terminal;
 import edu.kit.informatik.complex.MagicStrings;

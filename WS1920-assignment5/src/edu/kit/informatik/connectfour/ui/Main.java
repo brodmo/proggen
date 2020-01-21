@@ -1,12 +1,11 @@
-package edu.kit.informatik.torus.io;
+package edu.kit.informatik.connectfour.ui;
 
 import edu.kit.informatik.Terminal;
-import edu.kit.informatik.torus.model.Game;
-import edu.kit.informatik.torus.model.RuleException;
+import edu.kit.informatik.connectfour.model.Game;
+import edu.kit.informatik.connectfour.model.RuleException;
 
 public final class Main {
 
-    // WS19/20 ÜB5 A1
     public static void main(String[] args) {
         Game game = new Game();
         String input = Terminal.readLine();

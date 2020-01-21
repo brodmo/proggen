@@ -1,4 +1,4 @@
-package edu.kit.informatik.torus.io;
+package edu.kit.informatik.connectfour.ui;
 
 class ParseException extends Exception {
 

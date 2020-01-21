@@ -1,4 +1,4 @@
-package edu.kit.informatik.torus.model;
+package edu.kit.informatik.connectfour.model;
 
 class TorusBoard extends Board {
 
