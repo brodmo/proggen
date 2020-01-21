@@ -1,8 +1,6 @@
 package edu.kit.informatik.connectfour.model;
 
-import java.util.Collection;
-import java.util.Deque;
-import java.util.LinkedList;
+import java.util.*;
 
 abstract class Board {
 
@@ -14,7 +12,7 @@ abstract class Board {
     private Token[][] board = new Token[BOARD_SIZE][BOARD_SIZE];
 
     String rowToString(int row) throws RuleException {
-        checkRow(row);
+        checkCoordinate(row);
         StringBuilder sb = new StringBuilder();
         for (int col = 0; col < BOARD_SIZE; col++) {
             if (board[row][col] == null) {
@@ -28,7 +26,7 @@ abstract class Board {
     }
 
     String colToString(int col) throws RuleException {
-        checkCol(col);
+        checkCoordinate(col);
         StringBuilder sb = new StringBuilder();
         for (int row = 0; row < BOARD_SIZE; row++) {
             if (board[row][col] == null) {
@@ -41,80 +39,56 @@ abstract class Board {
         return sb.substring(0, sb.length() - 1);
     }
 
-    private void checkRow(int row) throws RuleException {
-        if (row < 0 | row > BOARD_SIZE) {
-            throw new RuleException("invalid row");
-        }
-    }
-
-    private void checkCol(int col) throws RuleException {
-        if (col < 0 | col > BOARD_SIZE) {
-            throw new RuleException("invalid col");
-        }
-    }
-
-    private void checkPos(Position pos) throws RuleException {
-        checkRow(pos.row());
-        checkCol(pos.col());
-    }
-
+    // returns true if placement allowed
     boolean place(Position pos, Token token) throws RuleException {
         Position transformed = transform(pos);
-        checkPos(transformed); // a tad hacky, todo think of better solution
-        int row = transformed.row();
-        int col = transformed.col();
-        if (board[row][col] != null) {
+        checkPos(transformed);
+        if (get(transformed) != null) {
             return false;
         }
-        board[row][col] = token;
+        set(transformed, token);
         return true;
     }
 
-
-    // you better disable parameter hints for this:
-    // https://stackoverflow.com/questions/40866202/
-    // intellij-shows-method-parameter-hints-on-usage-how-to-disable-it
     boolean winningState() {
         int max = BOARD_SIZE - 1;
         int boundsOffset = getBoundsOffset();
         for (int i = -boundsOffset; i < BOARD_SIZE + boundsOffset; i++) {
-            if (winningStateIteration(i, i + 1, 0,
-                    -boundsOffset, max + boundsOffset, 1) // cols
-                || winningStateIteration(-boundsOffset, max + boundsOffset, 1,
-                    i, i + 1, 0) // rows
-                || winningStateIteration(i, max + boundsOffset, 1,
-                    -boundsOffset, max - i, 1) // diagonal 1, down left half
-                || winningStateIteration(-boundsOffset, max - i, 1,
-                    i, max + boundsOffset, 1) // diagonal 1, upper right half
-                || winningStateIteration(max - i, -boundsOffset, -1,
-                    -boundsOffset, max - i, 1) // diagonal 2, top left half
-                || winningStateIteration(max + boundsOffset, i, -1,
-                    i, max + boundsOffset, 1) // diagonal 2, down right half
-            ) {
+            BoardLine[] linesToCheck = {
+                    // cols
+                    new BoardLine(this::posInBounds, new Position(i, -boundsOffset), 0, 1),
+                    // rows
+                    new BoardLine(this::posInBounds, new Position(-boundsOffset, i), 1, 0),
+                    // diagonal 1, lower left half of the board
+                    new BoardLine(this::posInBounds, new Position(i, -boundsOffset), 1, 1),
+                    // diagonal 1, upper right half of the board
+                    new BoardLine(this::posInBounds, new Position(-boundsOffset, i), 1, 1),
+                    // diagonal 2, top left half of the board
+                    new BoardLine(this::posInBounds, new Position(max - i, -boundsOffset), -1, 1),
+                    // diagonal 2, down right half of the board
+                    new BoardLine(this::posInBounds, new Position(max + boundsOffset, i), -1, 1),
+            };
+            if (winningStateIteration(linesToCheck)) {
                 return true;
             }
         }
         return false;
     }
 
-    // start, end inclusive
-    private boolean winningStateIteration(int rowStartIndex, int rowEndIndex, int rowChange,
-                                         int colStartIndex, int colEndIndex, int colChange) {
-        Deque<Token> lastFour = new LinkedList<>();
-        int row = rowStartIndex;
-        int col = colStartIndex;
-        do {
-            Position transformed = transform(new Position(row, col));
-            lastFour.addFirst(board[transformed.row()][transformed.col()]);
-            if (lastFour.size() >= NEEDED_TO_WIN) {
-                if (shareAttribute(lastFour)) {
-                    return true;
+    private boolean winningStateIteration(BoardLine[] linesToCheck) {
+        for (BoardLine line: linesToCheck) {
+            Deque<Token> lastFour = new LinkedList<>();
+            for (Position pos: line) {
+                Position transformed = transform(pos);
+                lastFour.addFirst(get(transformed));
+                if (lastFour.size() >= NEEDED_TO_WIN) {
+                    if (shareAttribute(lastFour)) {
+                        return true;
+                    }
+                    lastFour.removeLast();
                 }
-                lastFour.removeLast();
             }
-            row += rowChange;
-            col += colChange;
-        } while (row - rowChange != rowEndIndex && col - colChange!= colEndIndex);
+        }
         return false;
     }
 
@@ -144,6 +118,36 @@ abstract class Board {
             }
         }
         return false;
+    }
+
+    private void checkCoordinate(int coord) throws RuleException {
+        if (!coordinateInBounds(coord)) {
+            throw new RuleException("invalid position");
+        }
+    }
+
+    private void checkPos(Position pos) throws RuleException {
+        if (!posInBounds(pos)) {
+            throw new RuleException("invalid position");
+        }
+    }
+
+    private boolean coordinateInBounds(int row) {
+        return row >= 0 && row < BOARD_SIZE;
+    }
+
+    private boolean posInBounds(Position pos) {
+        return coordinateInBounds(pos.row()) && coordinateInBounds(pos.col());
+    }
+
+    // bare bones, get token at position
+    private Token get(Position pos) {
+        return board[pos.row()][pos.col()];
+    }
+
+    // bare bones, set token at position
+    private void set(Position pos, Token token) {
+        board[pos.row()][pos.col()] = token;
     }
 
     abstract Position transform(Position pos);
