@@ -16,4 +16,12 @@ public class Position {
     int col() {
         return col;
     }
+
+    int min() {
+        return Math.min(row, col);
+    }
+
+    int max() {
+        return Math.max(row, col);
+    }
 }

@@ -1,10 +1,8 @@
 package edu.kit.informatik.connectfour.ui;
 
-import edu.kit.informatik.connectfour.model.BoardType;
-import edu.kit.informatik.connectfour.model.Game;
-import edu.kit.informatik.connectfour.model.RuleException;
-import edu.kit.informatik.connectfour.model.Token;
-import edu.kit.informatik.connectfour.model.Position;
+import edu.kit.informatik.connectfour.model.*;
+
+import java.util.Map;
 
 import static edu.kit.informatik.connectfour.model.Game.NUMBER_OF_TOKENS;
 
@@ -12,9 +10,9 @@ public enum Command {
     START("start") {
         @Override
         String execute(String argument, Game game) throws ParseException, RuleException {
-            BoardType boardType = parseBoardType(argument);
+            Board board = parseBoard(argument);
             game.reset();
-            game.setBoardType(boardType);
+            game.setBoard(board);
             return OK;
         }
     },
@@ -96,11 +94,10 @@ public enum Command {
         }
     }
 
-    private static BoardType parseBoardType(String argument) throws ParseException {
-        if (argument.equals("standard")) {
-            return BoardType.STANDARD;
-        } else if (argument.equals("connectfour")) {
-            return BoardType.TORUS;
+    private static Board parseBoard(String argument) throws ParseException {
+        Map<String, Board> availableMap = Board.getAvailableBoards();
+        if (availableMap.containsKey(argument)) {
+            return availableMap.get(argument);
         } else {
             throw new ParseException("unknown board type");
         }

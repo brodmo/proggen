@@ -21,7 +21,7 @@ class BoardLine implements Iterable<Position> {
 
     @Override
     public Iterator<Position> iterator() {
-        return new Iterator<>() {
+        return new Iterator<Position>() {
             int row = startPosition.row();
             int col = startPosition.col();
 

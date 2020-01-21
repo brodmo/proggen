@@ -2,7 +2,7 @@ package edu.kit.informatik.connectfour.model;
 
 import java.util.*;
 
-abstract class Board {
+public abstract class Board {
 
     public static final char EMPTY_BOARD_CHAR = '#';
 
@@ -10,6 +10,13 @@ abstract class Board {
     public static final int NEEDED_TO_WIN = 4;
 
     private Token[][] board = new Token[BOARD_SIZE][BOARD_SIZE];
+
+    public static Map<String, Board> getAvailableBoards() {
+        Map<String, Board> availableMap = new HashMap<>();
+        availableMap.put("standard", new StandardBoard());
+        availableMap.put("torus", new TorusBoard());
+        return availableMap;
+    }
 
     String rowToString(int row) throws RuleException {
         checkCoordinate(row);
@@ -121,23 +128,24 @@ abstract class Board {
     }
 
     private void checkCoordinate(int coord) throws RuleException {
-        if (!coordinateInBounds(coord)) {
-            throw new RuleException("invalid position");
+        if (!coordinateValid(coord)) {
+            throw new RuleException("invalid coordinate(s)");
         }
     }
 
     private void checkPos(Position pos) throws RuleException {
-        if (!posInBounds(pos)) {
-            throw new RuleException("invalid position");
-        }
+        checkCoordinate(pos.row());
+        checkCoordinate(pos.col());
     }
 
-    private boolean coordinateInBounds(int row) {
+    private boolean coordinateValid(int row) {
         return row >= 0 && row < BOARD_SIZE;
     }
 
+    // different to coordinateValid
     private boolean posInBounds(Position pos) {
-        return coordinateInBounds(pos.row()) && coordinateInBounds(pos.col());
+        int offset = getBoundsOffset();
+        return pos.min() >= -offset && pos.max() < BOARD_SIZE + offset;
     }
 
     // bare bones, get token at position

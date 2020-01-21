@@ -1,16 +1,16 @@
 package edu.kit.informatik.connectfour.model;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import edu.kit.informatik.connectfour.util.StringUtil;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Game {
 
     public static final int NUMBER_OF_TOKENS = 16;
 
     // is null periodically
-    private Token currentToken;
+    private Token currentToken; // todo remove null token, introduce NullToken
     private int playerWhoPlaced;
     private Board board;
     private Map<Token, Integer> availableTokens;
@@ -94,8 +94,8 @@ public class Game {
         currentToken = token;
     }
 
-    public void setBoardType(BoardType boardType) {
-        board = boardType == BoardType.TORUS ? new TorusBoard() : new StandardBoard();
+    public void setBoard(Board board) {
+        this.board = board;
     }
 
     public boolean boardTypeSet() {
@@ -103,13 +103,11 @@ public class Game {
     }
 
     public String getAvailable() {
-        Set<Token> available = getAvailableIntern();
-        StringBuilder sb = new StringBuilder();
-        for (Token token: available) {
-            sb.append(token.toNumber());
-            sb.append(" ");
-        }
-        return sb.substring(0, sb.length() - 1);
+        Collection<String> tokenStrings = getAvailableIntern()
+                .stream()
+                .map(Token::toString)
+                .collect(Collectors.toList());
+        return StringUtil.join(tokenStrings," ");
     }
 
     private Set<Token> getAvailableIntern() {
