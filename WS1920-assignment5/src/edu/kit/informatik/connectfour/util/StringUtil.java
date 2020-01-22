@@ -5,8 +5,10 @@ import java.util.StringJoiner;
 
 public class StringUtil {
 
-    public static String join(Collection<String> strings, String delimiter) {
-        StringJoiner joiner = new StringJoiner(delimiter);
+    public static final String DELIMITER = " ";
+
+    public static String join(Collection<String> strings) {
+        StringJoiner joiner = new StringJoiner(DELIMITER);
         for (String str: strings) {
             joiner.add(str);
         }

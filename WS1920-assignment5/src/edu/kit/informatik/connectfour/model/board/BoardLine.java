@@ -1,5 +1,4 @@
-package edu.kit.informatik.connectfour.model;
-
+package edu.kit.informatik.connectfour.model.board;
 
 import java.util.Iterator;
 import java.util.function.Function;
@@ -39,5 +38,4 @@ class BoardLine implements Iterable<Position> {
             }
         };
     }
-
 }

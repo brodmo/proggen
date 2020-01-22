@@ -1,13 +1,13 @@
-package edu.kit.informatik.connectfour.model;
+package edu.kit.informatik.connectfour.model.token;
 
-import static edu.kit.informatik.connectfour.model.Color.BLACK;
-import static edu.kit.informatik.connectfour.model.Color.WHITE;
-import static edu.kit.informatik.connectfour.model.Fill.HOLLOW;
-import static edu.kit.informatik.connectfour.model.Fill.SOLID;
-import static edu.kit.informatik.connectfour.model.Shape.ANGULAR;
-import static edu.kit.informatik.connectfour.model.Shape.ROTUND;
-import static edu.kit.informatik.connectfour.model.Size.LARGE;
-import static edu.kit.informatik.connectfour.model.Size.SMALL;
+import static edu.kit.informatik.connectfour.model.token.Color.BLACK;
+import static edu.kit.informatik.connectfour.model.token.Color.WHITE;
+import static edu.kit.informatik.connectfour.model.token.Fill.HOLLOW;
+import static edu.kit.informatik.connectfour.model.token.Fill.SOLID;
+import static edu.kit.informatik.connectfour.model.token.Shape.ANGULAR;
+import static edu.kit.informatik.connectfour.model.token.Shape.ROTUND;
+import static edu.kit.informatik.connectfour.model.token.Size.LARGE;
+import static edu.kit.informatik.connectfour.model.token.Size.SMALL;
 
 enum Attribute {
     COLOR {

@@ -1,25 +1,21 @@
-package edu.kit.informatik.connectfour.model;
+package edu.kit.informatik.connectfour.model.token;
 
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 
-import static edu.kit.informatik.connectfour.model.AttributeValue.attributesToNumber;
-import static edu.kit.informatik.connectfour.model.AttributeValue.getAttributes;
+import static edu.kit.informatik.connectfour.model.token.AttributeValue.attributesToNumber;
+import static edu.kit.informatik.connectfour.model.token.AttributeValue.getAttributes;
 
 public class Token {
 
     private Set<AttributeValue> attributes;
 
     public Token(int number) {
-        attributes = getAttributes(number);
+        this.attributes = getAttributes(number);
     }
 
-    private Token(Set<AttributeValue> attributes) {
-        this.attributes = attributes;
-    }
-
-    Set<AttributeValue> attributes() {
+    public Set<AttributeValue> attributes() {
         return Collections.unmodifiableSet(attributes);
     }
 

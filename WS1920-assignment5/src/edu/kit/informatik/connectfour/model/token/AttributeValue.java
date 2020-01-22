@@ -1,11 +1,11 @@
-package edu.kit.informatik.connectfour.model;
+package edu.kit.informatik.connectfour.model.token;
 
 import edu.kit.informatik.connectfour.util.BitUtil;
 
 import java.util.HashSet;
 import java.util.Set;
 
-interface AttributeValue {
+public interface AttributeValue {
     static Set<AttributeValue> getAttributes(int number) {
         Set<AttributeValue> attributes = new HashSet<>();
         for (Attribute attr: Attribute.values()) {

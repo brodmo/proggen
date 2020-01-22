@@ -1,4 +1,4 @@
-package edu.kit.informatik.connectfour.model;
+package edu.kit.informatik.connectfour.model.board;
 
 public class Position {
     private final int row;

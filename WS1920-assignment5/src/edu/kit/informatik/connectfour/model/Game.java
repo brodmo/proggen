@@ -1,9 +1,11 @@
 package edu.kit.informatik.connectfour.model;
 
+import edu.kit.informatik.connectfour.model.board.Board;
+import edu.kit.informatik.connectfour.model.board.Position;
+import edu.kit.informatik.connectfour.model.token.Token;
 import edu.kit.informatik.connectfour.util.StringUtil;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Game {
 
@@ -103,11 +105,11 @@ public class Game {
     }
 
     public String getAvailable() {
-        Collection<String> tokenStrings = getAvailableIntern()
-                .stream()
-                .map(Token::toString)
-                .collect(Collectors.toList());
-        return StringUtil.join(tokenStrings," ");
+        Collection<String> tokenStrings = new HashSet<>();
+        for (Token tkn: getAvailableIntern()) {
+            tokenStrings.add(tkn.toString());
+        }
+        return StringUtil.join(tokenStrings);
     }
 
     private Set<Token> getAvailableIntern() {

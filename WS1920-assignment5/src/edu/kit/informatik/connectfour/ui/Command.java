@@ -1,6 +1,9 @@
 package edu.kit.informatik.connectfour.ui;
 
 import edu.kit.informatik.connectfour.model.*;
+import edu.kit.informatik.connectfour.model.board.Board;
+import edu.kit.informatik.connectfour.model.board.Position;
+import edu.kit.informatik.connectfour.model.token.Token;
 
 import java.util.Map;
 

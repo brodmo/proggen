@@ -1,15 +1,26 @@
-package edu.kit.informatik.connectfour.model;
+package edu.kit.informatik.connectfour.model.board;
+
+import edu.kit.informatik.connectfour.model.token.AttributeValue;
+import edu.kit.informatik.connectfour.model.RuleException;
+import edu.kit.informatik.connectfour.model.token.Token;
+import edu.kit.informatik.connectfour.util.StringUtil;
 
 import java.util.*;
 
 public abstract class Board {
 
-    public static final char EMPTY_BOARD_CHAR = '#';
-
     public static final int BOARD_SIZE = 6; // assumes quadratic board
     public static final int NEEDED_TO_WIN = 4;
 
-    private Token[][] board = new Token[BOARD_SIZE][BOARD_SIZE];
+    private Field[][] board = new Field[BOARD_SIZE][BOARD_SIZE];
+
+    protected Board() {
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                board[row][col] = new Field();
+            }
+        }
+    }
 
     public static Map<String, Board> getAvailableBoards() {
         Map<String, Board> availableMap = new HashMap<>();
@@ -18,46 +29,37 @@ public abstract class Board {
         return availableMap;
     }
 
-    String rowToString(int row) throws RuleException {
+    public String rowToString(int row) throws RuleException {
         checkCoordinate(row);
-        StringBuilder sb = new StringBuilder();
+        List<String> rowStrings = new ArrayList<>();
         for (int col = 0; col < BOARD_SIZE; col++) {
-            if (board[row][col] == null) {
-                sb.append(EMPTY_BOARD_CHAR);
-            } else {
-                sb.append(board[row][col].toString());
-            }
-            sb.append(" "); // this better not count as a magic string
+            rowStrings.add(board[row][col].toString());
         }
-        return sb.substring(0, sb.length() - 1);
+        return StringUtil.join(rowStrings);
     }
 
-    String colToString(int col) throws RuleException {
+    public String colToString(int col) throws RuleException {
         checkCoordinate(col);
-        StringBuilder sb = new StringBuilder();
+        List<String> colStrings = new ArrayList<>();
         for (int row = 0; row < BOARD_SIZE; row++) {
-            if (board[row][col] == null) {
-                sb.append(EMPTY_BOARD_CHAR);
-            } else {
-                sb.append(board[row][col].toString());
-            }
-            sb.append(" "); // this better not count as a magic string
+            colStrings.add(board[row][col].toString());
         }
-        return sb.substring(0, sb.length() - 1);
+        return StringUtil.join(colStrings);
     }
 
     // returns true if placement allowed
-    boolean place(Position pos, Token token) throws RuleException {
+    public boolean place(Position pos, Token token) throws RuleException {
         Position transformed = transform(pos);
         checkPos(transformed);
-        if (get(transformed) != null) {
+        Field fld = get(transformed);
+        if (!fld.isEmpty()) {
             return false;
         }
-        set(transformed, token);
+        fld.place(token);
         return true;
     }
 
-    boolean winningState() {
+    public boolean winningState() {
         int max = BOARD_SIZE - 1;
         int boundsOffset = getBoundsOffset();
         for (int i = -boundsOffset; i < BOARD_SIZE + boundsOffset; i++) {
@@ -87,7 +89,7 @@ public abstract class Board {
             Deque<Token> lastFour = new LinkedList<>();
             for (Position pos: line) {
                 Position transformed = transform(pos);
-                lastFour.addFirst(get(transformed));
+                lastFour.addFirst(get(transformed).token());
                 if (lastFour.size() >= NEEDED_TO_WIN) {
                     if (shareAttribute(lastFour)) {
                         return true;
@@ -129,15 +131,11 @@ public abstract class Board {
         return pos.min() >= -offset && pos.max() < BOARD_SIZE + offset;
     }
 
-    // bare bones, get token at position
-    private Token get(Position pos) {
+    // bare bones, get field at position
+    private Field get(Position pos) {
         return board[pos.row()][pos.col()];
     }
 
-    // bare bones, set token at position
-    private void set(Position pos, Token token) {
-        board[pos.row()][pos.col()] = token;
-    }
 
     abstract Position transform(Position pos);
 
