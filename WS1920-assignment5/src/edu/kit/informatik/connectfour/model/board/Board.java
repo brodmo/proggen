@@ -84,29 +84,22 @@ public abstract class Board {
                     // diagonal 2, down right half of the board
                     new BoardLine(new Position(max + boundsOffset, i), -1, 1),
             };
-            if (winningStateIteration(linesToCheck)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean winningStateIteration(BoardLine[] linesToCheck) {
-        for (BoardLine line: linesToCheck) {
-            Queue<Field> lastFour = new LinkedList<>();
-            for (Position pos: line) {
-                lastFour.add(get(transform(pos)));
-                if (lastFour.size() >= NEEDED_TO_WIN) {
-                    if (shareAttribute(lastFour)) {
-                        return true;
+            for (BoardLine line: linesToCheck) {
+                Queue<Field> lastFour = new LinkedList<>();
+                for (Position pos: line) {
+                    lastFour.add(get(transform(pos)));
+                    if (lastFour.size() >= NEEDED_TO_WIN) {
+                        if (shareAttribute(lastFour)) {
+                            return true;
+                        }
+                        lastFour.remove();
                     }
-                    lastFour.remove();
                 }
             }
         }
         return false;
     }
-
+    
     private boolean shareAttribute(Queue<Field> fields) {
         Set<AttributeValue> commonAttributes = new HashSet<>(
                 fields.element().getAttributesOfToken());
