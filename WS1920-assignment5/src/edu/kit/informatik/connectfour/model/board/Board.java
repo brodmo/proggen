@@ -8,6 +8,7 @@ import edu.kit.informatik.connectfour.util.StringUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -72,18 +73,16 @@ public abstract class Board {
         int boundsOffset = getBoundsOffset();
         for (int i = -boundsOffset; i < BOARD_SIZE + boundsOffset; i++) {
             BoardLine[] linesToCheck = {
-                    new BoardLine(this::posInBounds, // cols
-                            new Position(i, -boundsOffset), 0, 1),
-                    new BoardLine(this::posInBounds, // rows
-                            new Position(-boundsOffset, i), 1, 0),
-                    new BoardLine(this::posInBounds, // diagonal 1, lower left half of the board
-                            new Position(i, -boundsOffset), 1, 1),
-                    new BoardLine(this::posInBounds, // diagonal 1, upper right half of the board
-                            new Position(-boundsOffset, i), 1, 1),
-                    new BoardLine(this::posInBounds, // diagonal 2, top left half of the board
-                            new Position(max - i, -boundsOffset), -1, 1),
-                    new BoardLine(this::posInBounds, // diagonal 2, down right half of the board
-                            new Position(max + boundsOffset, i), -1, 1),
+                    new BoardLine(new Position(i, -boundsOffset), 0, 1), // cols
+                    new BoardLine(new Position(-boundsOffset, i), 1, 0), // rows
+                    // diagonal 1, lower left half of the board
+                    new BoardLine(new Position(i, -boundsOffset), 1, 1),
+                    // diagonal 1, upper right half of the board
+                    new BoardLine(new Position(-boundsOffset, i), 1, 1),
+                    // diagonal 2, top left half of the board
+                    new BoardLine(new Position(max - i, -boundsOffset), -1, 1),
+                    // diagonal 2, down right half of the board
+                    new BoardLine(new Position(max + boundsOffset, i), -1, 1),
             };
             if (winningStateIteration(linesToCheck)) {
                 return true;
@@ -129,8 +128,8 @@ public abstract class Board {
         checkCoordinate(pos.col());
     }
 
-    private boolean coordinateValid(int row) {
-        return row >= 0 && row < BOARD_SIZE;
+    private boolean coordinateValid(int coord) {
+        return coord >= 0 && coord < BOARD_SIZE;
     }
 
     // different to coordinateValid
@@ -147,5 +146,39 @@ public abstract class Board {
     abstract Position transform(Position pos);
 
     abstract int getBoundsOffset();
+
+    private class BoardLine implements Iterable<Position> {
+
+        private final Position startPosition;
+        private final int rowChange;
+        private final int colChange;
+
+        private BoardLine(Position startPosition, int rowChange, int colChange) {
+            this.startPosition = startPosition;
+            this.rowChange = rowChange;
+            this.colChange = colChange;
+        }
+
+        @Override
+        public Iterator<Position> iterator() {
+            return new Iterator<Position>() {
+                int row = startPosition.row();
+                int col = startPosition.col();
+
+                @Override
+                public boolean hasNext() {
+                    return posInBounds(new Position(row, col));
+                }
+
+                @Override
+                public Position next() {
+                    Position nextPos = new Position(row, col);
+                    row += rowChange;
+                    col += colChange;
+                    return nextPos;
+                }
+            };
+        }
+    }
 }
 
