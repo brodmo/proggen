@@ -1,6 +1,6 @@
 package edu.kit.informatik.connectfour.util;
 
-public class BitUtil {
+public final class BitUtil {
 
     public static int setBit(int number, int bitIndex) {
         return number | (1 << bitIndex);

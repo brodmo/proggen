@@ -5,22 +5,19 @@ import edu.kit.informatik.connectfour.model.board.Position;
 import edu.kit.informatik.connectfour.model.token.Token;
 import edu.kit.informatik.connectfour.util.StringUtil;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-
 public class Game {
 
     public static final int NUMBER_OF_TOKENS = 16;
 
-    // is null periodically
-    private Token selectedToken;
-    private int playerWhoPlaced;
     private Board board;
     private Map<Token, Integer> availableTokens;
+    private Token selectedToken; // is null when no token selected
+    private int playerWhoPlaced;
     private int counter;
     private boolean finished;
     private boolean outOfTokens;
@@ -30,16 +27,50 @@ public class Game {
     }
 
     public void reset() {
-        playerWhoPlaced = 1;
-        takeSelectedToken();
+        // your responsibility if board is not set and you call a method that needs it ¯\_(ツ)_/¯
         board = null;
+        takeSelectedToken();
+        playerWhoPlaced = 1;
         counter = -1;
-        availableTokens = new HashMap<>();
         finished = false;
         outOfTokens = false;
+        availableTokens = new HashMap<>();
         for (int i = 0; i < NUMBER_OF_TOKENS; i++) {
             availableTokens.put(new Token(i), 1);
         }
+    }
+
+    public int getPlayerWhoPlaced() {
+        return playerWhoPlaced;
+    }
+
+    public int getCounter() {
+        return counter;
+    }
+
+    public boolean outOfTokens() {
+        return outOfTokens;
+    }
+
+    public boolean boardSet() {
+        return board != null;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public void take(Token token) throws RuleException {
+        checkFinished();
+        if (tokenSelected()) {
+            throw new RuleException("a token has already been selected");
+        }
+        int available = availableTokens.get(token);
+        if (available <= 0) {
+            throw new RuleException("token is not available (anymore)");
+        }
+        availableTokens.put(token, available - 1);
+        selectedToken = token;
     }
 
     // returns true on win
@@ -58,8 +89,8 @@ public class Game {
             outOfTokens = true;
             finished = true;
         }
-        counter++;
         playerWhoPlaced = playerWhoPlaced % 2 + 1;
+        counter++;
         boolean won = board.winningState();
         if (won) {
             finished = true;
@@ -67,58 +98,8 @@ public class Game {
         return won;
     }
 
-    private boolean tokenSelected() {
-        return selectedToken != null;
-    }
-
-    private void takeSelectedToken() {
-        selectedToken = null;
-    }
-
-    private boolean noMoreTokens() {
-        for (int i: availableTokens.values()) {
-            if (i != 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public int getCounter() {
-        return counter;
-    }
-
-    public boolean outOfTokens() {
-        return outOfTokens;
-    }
-
-    public int getPlayerWhoPlaced() {
-        return playerWhoPlaced;
-    }
-
-    public void take(Token token) throws RuleException {
-        checkFinished();
-        if (tokenSelected()) {
-            throw new RuleException("a token has already been selected");
-        }
-        int available = availableTokens.get(token);
-        if (available == 0) {
-            throw new RuleException("token is not available (anymore)");
-        }
-        availableTokens.put(token, available - 1);
-        selectedToken = token;
-    }
-
-    public void setBoard(Board board) {
-        this.board = board;
-    }
-
-    public boolean boardTypeSet() {
-        return board != null;
-    }
-
     public String getAvailable() {
-        Collection<String> tokenStrings = new HashSet<>();
+        Set<String> tokenStrings = new HashSet<>();
         for (Token tkn: getAvailableIntern()) {
             tokenStrings.add(tkn.toString());
         }
@@ -142,6 +123,23 @@ public class Game {
 
     public String colToString(int col) throws RuleException {
         return board.colToString(col);
+    }
+
+    private boolean tokenSelected() {
+        return selectedToken != null;
+    }
+
+    private void takeSelectedToken() {
+        selectedToken = null;
+    }
+
+    private boolean noMoreTokens() {
+        for (int i: availableTokens.values()) {
+            if (i > 0) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void checkFinished() throws RuleException {

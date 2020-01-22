@@ -1,65 +1,56 @@
 package edu.kit.informatik.connectfour.model.token;
 
-import static edu.kit.informatik.connectfour.model.token.Color.BLACK;
-import static edu.kit.informatik.connectfour.model.token.Color.WHITE;
-import static edu.kit.informatik.connectfour.model.token.Fill.HOLLOW;
-import static edu.kit.informatik.connectfour.model.token.Fill.SOLID;
-import static edu.kit.informatik.connectfour.model.token.Shape.ANGULAR;
-import static edu.kit.informatik.connectfour.model.token.Shape.ROTUND;
-import static edu.kit.informatik.connectfour.model.token.Size.LARGE;
-import static edu.kit.informatik.connectfour.model.token.Size.SMALL;
-
 enum Attribute {
     COLOR {
-        public int getBitIndex() {
+        int getBitIndex() {
             return 3;
         }
 
-        public AttributeValue getValueOnBitNotSet() {
-            return BLACK;
+        AttributeValue getValueOnBitNotSet() {
+            return AttributeValue.Color.BLACK;
         }
 
-        public AttributeValue getValueOnBitSet() {
-            return WHITE;
-        }
-    },
-    FILL {
-        public int getBitIndex() {
-            return 2;
-        }
-
-        public AttributeValue getValueOnBitNotSet() {
-            return ANGULAR;
-        }
-
-        public AttributeValue getValueOnBitSet() {
-            return ROTUND;
+        AttributeValue getValueOnBitSet() {
+            return AttributeValue.Color.WHITE;
         }
     },
     SHAPE {
-        public int getBitIndex() {
-            return 1;
+        int getBitIndex() {
+            return 2;
         }
 
-        public AttributeValue getValueOnBitNotSet() {
-            return SMALL;
+        AttributeValue getValueOnBitNotSet() {
+            return AttributeValue.Shape.ANGULAR;
         }
 
-        public AttributeValue getValueOnBitSet() {
-            return LARGE;
+        AttributeValue getValueOnBitSet() {
+            return AttributeValue.Shape.ROTUND;
         }
     },
     SIZE {
-        public int getBitIndex() {
+        int getBitIndex() {
+            return 1;
+        }
+
+        AttributeValue getValueOnBitNotSet() {
+            return AttributeValue.Size.SMALL;
+        }
+
+        AttributeValue getValueOnBitSet() {
+            return AttributeValue.Size.LARGE;
+        }
+    },
+    FILL {
+        int getBitIndex() {
             return 0;
         }
 
-        public AttributeValue getValueOnBitNotSet() {
-            return HOLLOW;
+        AttributeValue getValueOnBitNotSet() {
+            return AttributeValue.Fill.HOLLOW;
         }
 
-        public AttributeValue getValueOnBitSet() {
-            return SOLID;
+        AttributeValue getValueOnBitSet() {
+            return AttributeValue.Fill.SOLID;
         }
     };
 
