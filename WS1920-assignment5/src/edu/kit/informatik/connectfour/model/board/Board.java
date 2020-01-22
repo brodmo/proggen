@@ -6,13 +6,14 @@ import edu.kit.informatik.connectfour.model.token.Token;
 import edu.kit.informatik.connectfour.util.StringUtil;
 
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public abstract class Board {
 
@@ -21,7 +22,7 @@ public abstract class Board {
 
     private Field[][] board = new Field[BOARD_SIZE][BOARD_SIZE];
 
-    protected Board() {
+    Board() {
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
                 board[row][col] = new Field();
@@ -93,24 +94,26 @@ public abstract class Board {
 
     private boolean winningStateIteration(BoardLine[] linesToCheck) {
         for (BoardLine line: linesToCheck) {
-            Deque<Field> lastFour = new LinkedList<>();
+            Queue<Field> lastFour = new LinkedList<>();
             for (Position pos: line) {
-                lastFour.addFirst(get(transform(pos)));
+                lastFour.add(get(transform(pos)));
                 if (lastFour.size() >= NEEDED_TO_WIN) {
-                    if (shareAttribute(lastFour.toArray(new Field[0]))) {
+                    if (shareAttribute(lastFour)) {
                         return true;
                     }
-                    lastFour.removeLast();
+                    lastFour.remove();
                 }
             }
         }
         return false;
     }
 
-    private boolean shareAttribute(Field[] fields) {
-        Set<AttributeValue> commonAttributes = new HashSet<>(fields[0].getAttributesOfToken());
-        for (int i = 1; i < fields.length; i++) {
-            commonAttributes.retainAll(fields[i].getAttributesOfToken());
+    private boolean shareAttribute(Queue<Field> fields) {
+        Set<AttributeValue> commonAttributes = new HashSet<>(
+                fields.element().getAttributesOfToken());
+        for (Field fld: fields
+                .stream().skip(1).collect(Collectors.toList())) { // skip first iteration
+            commonAttributes.retainAll(fld.getAttributesOfToken());
         }
         return !commonAttributes.isEmpty();
     }
@@ -140,7 +143,6 @@ public abstract class Board {
     private Field get(Position pos) {
         return board[pos.row()][pos.col()];
     }
-
 
     abstract Position transform(Position pos);
 

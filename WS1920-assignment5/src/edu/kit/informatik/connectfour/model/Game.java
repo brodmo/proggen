@@ -17,7 +17,7 @@ public class Game {
     public static final int NUMBER_OF_TOKENS = 16;
 
     // is null periodically
-    private Token currentToken;
+    private Token selectedToken;
     private int playerWhoPlaced;
     private Board board;
     private Map<Token, Integer> availableTokens;
@@ -31,7 +31,7 @@ public class Game {
 
     public void reset() {
         playerWhoPlaced = 1;
-        currentToken = null;
+        takeSelectedToken();
         board = null;
         counter = -1;
         availableTokens = new HashMap<>();
@@ -45,26 +45,34 @@ public class Game {
     // returns true on win
     public boolean place(Position pos) throws RuleException {
         checkFinished();
-        if (currentToken == null) {
+        if (!tokenSelected()) {
             throw new RuleException("no token has been selected");
         }
-        if (!board.place(pos, currentToken)) {
-            availableTokens.put(currentToken, availableTokens.get(currentToken) + 1);
-            currentToken = null;
+        if (!board.place(pos, selectedToken)) {
+            takeSelectedToken();
+            availableTokens.put(selectedToken, availableTokens.get(selectedToken) + 1);
             throw new RuleException("cannot place token on non-empty field");
         }
-        playerWhoPlaced = playerWhoPlaced % 2 + 1;
-        currentToken = null;
+        takeSelectedToken();
         if (noMoreTokens()) {
             outOfTokens = true;
             finished = true;
         }
         counter++;
+        playerWhoPlaced = playerWhoPlaced % 2 + 1;
         boolean won = board.winningState();
         if (won) {
             finished = true;
         }
         return won;
+    }
+
+    private boolean tokenSelected() {
+        return selectedToken != null;
+    }
+
+    private void takeSelectedToken() {
+        selectedToken = null;
     }
 
     private boolean noMoreTokens() {
@@ -90,7 +98,7 @@ public class Game {
 
     public void take(Token token) throws RuleException {
         checkFinished();
-        if (currentToken != null) {
+        if (tokenSelected()) {
             throw new RuleException("a token has already been selected");
         }
         int available = availableTokens.get(token);
@@ -98,7 +106,7 @@ public class Game {
             throw new RuleException("token is not available (anymore)");
         }
         availableTokens.put(token, available - 1);
-        currentToken = token;
+        selectedToken = token;
     }
 
     public void setBoard(Board board) {
@@ -135,7 +143,6 @@ public class Game {
     public String colToString(int col) throws RuleException {
         return board.colToString(col);
     }
-
 
     private void checkFinished() throws RuleException {
         if (finished) {
