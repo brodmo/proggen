@@ -1,6 +1,10 @@
 package edu.kit.informatik.connectfour.model.board;
 
+import edu.kit.informatik.connectfour.model.token.AttributeValue;
 import edu.kit.informatik.connectfour.model.token.Token;
+
+import java.util.HashSet;
+import java.util.Set;
 
 class Field {
 
@@ -18,6 +22,14 @@ class Field {
 
     Token token() {
         return token;
+    }
+
+    Set<AttributeValue> getAttributesOfToken() {
+        if (isEmpty()) {
+            return new HashSet<>();
+        } else {
+            return token.attributes();
+        }
     }
 
     @Override

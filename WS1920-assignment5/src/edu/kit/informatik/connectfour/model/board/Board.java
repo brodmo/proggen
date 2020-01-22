@@ -86,10 +86,10 @@ public abstract class Board {
 
     private boolean winningStateIteration(BoardLine[] linesToCheck) {
         for (BoardLine line: linesToCheck) {
-            Deque<Token> lastFour = new LinkedList<>();
+            Deque<Field> lastFour = new LinkedList<>();
             for (Position pos: line) {
                 Position transformed = transform(pos);
-                lastFour.addFirst(get(transformed).token());
+                lastFour.addFirst(get(transformed));
                 if (lastFour.size() >= NEEDED_TO_WIN) {
                     if (shareAttribute(lastFour)) {
                         return true;
@@ -102,10 +102,10 @@ public abstract class Board {
     }
 
 
-    private boolean shareAttribute(Deque<Token> tokens) {
-        Set<AttributeValue> commonAttributes = tokens.pop().attributes();
-        for (Token tkn: tokens) {
-            commonAttributes.retainAll(tkn.attributes());
+    private boolean shareAttribute(Deque<Field> tokens) {
+        Set<AttributeValue> commonAttributes = tokens.pop().getAttributesOfToken();
+        for (Field tkn: tokens) {
+            commonAttributes.retainAll(tkn.getAttributesOfToken());
         }
         return !commonAttributes.isEmpty();
     }

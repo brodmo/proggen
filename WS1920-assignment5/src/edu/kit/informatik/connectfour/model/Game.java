@@ -12,7 +12,7 @@ public class Game {
     public static final int NUMBER_OF_TOKENS = 16;
 
     // is null periodically
-    private Token currentToken; // todo remove null token, introduce NullToken
+    private Token currentToken;
     private int playerWhoPlaced;
     private Board board;
     private Map<Token, Integer> availableTokens;
