@@ -5,10 +5,10 @@ import java.util.function.Function;
 
 class BoardLine implements Iterable<Position> {
 
-    private Function<Position, Boolean> posInBounds;
-    private Position startPosition;
-    private int rowChange;
-    private int colChange;
+    private final Function<Position, Boolean> posInBounds;
+    private final Position startPosition;
+    private final int rowChange;
+    private final int colChange;
 
     BoardLine(Function<Position, Boolean> posInBounds,
               Position startPosition, int rowChange, int colChange) {

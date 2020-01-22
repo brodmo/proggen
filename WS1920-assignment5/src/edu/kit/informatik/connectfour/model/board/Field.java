@@ -20,10 +20,6 @@ class Field {
         return token == null;
     }
 
-    Token token() {
-        return token;
-    }
-
     Set<AttributeValue> getAttributesOfToken() {
         if (isEmpty()) {
             return new HashSet<>();

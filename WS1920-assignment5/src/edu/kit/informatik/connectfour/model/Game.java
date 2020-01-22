@@ -5,7 +5,12 @@ import edu.kit.informatik.connectfour.model.board.Position;
 import edu.kit.informatik.connectfour.model.token.Token;
 import edu.kit.informatik.connectfour.util.StringUtil;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 
 public class Game {
 

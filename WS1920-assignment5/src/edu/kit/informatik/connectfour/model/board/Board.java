@@ -1,11 +1,18 @@
 package edu.kit.informatik.connectfour.model.board;
 
-import edu.kit.informatik.connectfour.model.token.AttributeValue;
 import edu.kit.informatik.connectfour.model.RuleException;
+import edu.kit.informatik.connectfour.model.token.AttributeValue;
 import edu.kit.informatik.connectfour.model.token.Token;
 import edu.kit.informatik.connectfour.util.StringUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public abstract class Board {
 
@@ -88,10 +95,9 @@ public abstract class Board {
         for (BoardLine line: linesToCheck) {
             Deque<Field> lastFour = new LinkedList<>();
             for (Position pos: line) {
-                Position transformed = transform(pos);
-                lastFour.addFirst(get(transformed));
+                lastFour.addFirst(get(transform(pos)));
                 if (lastFour.size() >= NEEDED_TO_WIN) {
-                    if (shareAttribute(lastFour)) {
+                    if (shareAttribute(lastFour.toArray(new Field[0]))) {
                         return true;
                     }
                     lastFour.removeLast();
@@ -101,11 +107,10 @@ public abstract class Board {
         return false;
     }
 
-
-    private boolean shareAttribute(Deque<Field> tokens) {
-        Set<AttributeValue> commonAttributes = tokens.pop().getAttributesOfToken();
-        for (Field tkn: tokens) {
-            commonAttributes.retainAll(tkn.getAttributesOfToken());
+    private boolean shareAttribute(Field[] fields) {
+        Set<AttributeValue> commonAttributes = new HashSet<>(fields[0].getAttributesOfToken());
+        for (int i = 1; i < fields.length; i++) {
+            commonAttributes.retainAll(fields[i].getAttributesOfToken());
         }
         return !commonAttributes.isEmpty();
     }

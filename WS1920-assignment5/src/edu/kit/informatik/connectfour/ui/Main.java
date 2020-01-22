@@ -4,8 +4,20 @@ import edu.kit.informatik.Terminal;
 import edu.kit.informatik.connectfour.model.Game;
 import edu.kit.informatik.connectfour.model.RuleException;
 
-public final class Main {
+/*
+start torus
+select 11
+place 1;4
+select 7
+place 3;0
+select 5
+place 4;1
+select 15
+place 2;5
 
+*/
+
+public final class Main {
     public static void main(String[] args) {
         Game game = new Game();
         String input = Terminal.readLine();

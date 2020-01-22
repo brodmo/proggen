@@ -1,6 +1,7 @@
 package edu.kit.informatik.connectfour.ui;
 
-import edu.kit.informatik.connectfour.model.*;
+import edu.kit.informatik.connectfour.model.Game;
+import edu.kit.informatik.connectfour.model.RuleException;
 import edu.kit.informatik.connectfour.model.board.Board;
 import edu.kit.informatik.connectfour.model.board.Position;
 import edu.kit.informatik.connectfour.model.token.Token;
@@ -67,10 +68,10 @@ public enum Command {
         throw new ParseException("no command of this name found");
     }
 
-    public static final String COORDINATE_SEPERATOR = ";";
-    abstract String execute(String argument, Game game) throws ParseException, RuleException;
-
+    public static final String COORDINATE_SEPARATOR = ";";
     public static final String OK = "OK";
+
+    abstract String execute(String argument, Game game) throws ParseException, RuleException;
 
     private String string;
 
@@ -120,7 +121,7 @@ public enum Command {
     }
 
     private static Position parsePosition(String argument) throws ParseException {
-        String[] split = argument.split(COORDINATE_SEPERATOR, -1);
+        String[] split = argument.split(COORDINATE_SEPARATOR, -1);
         if (split.length != 2) {
             throw new ParseException("not exactly 2 coordinates specified");
         }
