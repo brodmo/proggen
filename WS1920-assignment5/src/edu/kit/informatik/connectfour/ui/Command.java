@@ -17,7 +17,7 @@ public enum Command {
             Board board = parseBoard(trimSpace(argument));
             game.reset();
             game.setBoard(board);
-            return NOTHING;
+            return OK;
         }
     },
     SELECT("select") {
