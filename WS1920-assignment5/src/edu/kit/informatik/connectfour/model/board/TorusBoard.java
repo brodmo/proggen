@@ -8,11 +8,7 @@ class TorusBoard extends Board {
     }
 
     private int transform(int i) {
-        if (i >= 0) {
-            return i % BOARD_SIZE;
-        } else {
-            return BOARD_SIZE - Math.abs(i) % BOARD_SIZE;
-        }
+        return ((i % BOARD_SIZE) + BOARD_SIZE) % BOARD_SIZE;
     }
 
     @Override
