@@ -108,10 +108,9 @@ public class Game {
 
     private Set<Token> getAvailableIntern() {
         Set<Token> available = new HashSet<>();
-        for (int i = 0; i < NUMBER_OF_TOKENS; i++) {
-            Token token = new Token(i);
-            if (availableTokens.get(token) > 0){
-                available.add(token);
+        for (Token tkn: availableTokens.keySet()) {
+            if (availableTokens.get(tkn) > 0){
+                available.add(tkn);
             }
         }
         return available;
