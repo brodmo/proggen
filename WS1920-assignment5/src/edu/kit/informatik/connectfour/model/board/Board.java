@@ -120,12 +120,12 @@ public abstract class Board {
     }
 
     private boolean shareAttribute(Queue<Field> fields) {
+        // copy so we can remove and thus automatically not have
+        // commonAttributes.retainAll(commonAttributes) in the first iteration of the loop later
+        Queue<Field> fieldsCopy = new LinkedList<>(fields);
         Set<AttributeValue> commonAttributes = new HashSet<>(
-                fields.element().getAttributesOfToken());
-        // skip first iteration
-        for (Field fld: new LinkedList<>(fields).subList(1, fields.size())) {
-        /* illegal :sob:
-        for (Field fld: fields.stream().skip(1).collect(Collectors.toList())) { */
+                fieldsCopy.remove().getAttributesOfToken());
+        for (Field fld: fieldsCopy) {
             commonAttributes.retainAll(fld.getAttributesOfToken());
         }
         return !commonAttributes.isEmpty();
