@@ -150,7 +150,7 @@ public abstract class Board {
         checkCoordinate(pos.col());
     }
 
-    private class BoardLine implements Iterable<Position> {
+    private final class BoardLine implements Iterable<Position> {
 
         private final Position startPosition;
         private final int rowChange;

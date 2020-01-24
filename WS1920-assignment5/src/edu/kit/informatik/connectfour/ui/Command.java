@@ -71,15 +71,6 @@ public enum Command {
     public static final String OK = "OK";
     public static final String NOTHING = "";
 
-    abstract String executeIntern(String argument, Game game) throws ParseException, RuleException;
-
-    final String execute(String argument, Game game) throws ParseException, RuleException {
-        if (boardHasToBeSet && !game.boardSet()) {
-            throw new RuleException("you have to start the game and set a board type first!");
-        }
-        return executeIntern(argument, game);
-    }
-
     private String string;
     private boolean boardHasToBeSet;
 
@@ -91,6 +82,15 @@ public enum Command {
     Command(String string, boolean boardHasToBeSet) {
         this.string = string;
         this.boardHasToBeSet = boardHasToBeSet;
+    }
+
+    abstract String executeIntern(String argument, Game game) throws ParseException, RuleException;
+
+    final String execute(String argument, Game game) throws ParseException, RuleException {
+        if (boardHasToBeSet && !game.boardSet()) {
+            throw new RuleException("you have to start the game and set a board type first!");
+        }
+        return executeIntern(argument, game);
     }
 
     @Override
