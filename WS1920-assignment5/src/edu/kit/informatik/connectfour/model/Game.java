@@ -60,7 +60,7 @@ public class Game {
         this.board = board;
     }
 
-    public void take(Token token) throws RuleException {
+    public void place(Token token) throws RuleException {
         checkFinished();
         if (tokenSelected()) {
             throw new RuleException("a token has already been selected");
@@ -80,9 +80,9 @@ public class Game {
             throw new RuleException("no token has been selected");
         }
         if (!board.place(pos, selectedToken)) {
-            takeSelectedToken();
             availableTokens.put(selectedToken, availableTokens.get(selectedToken) + 1);
-            throw new RuleException("cannot place token on non-empty field");
+            takeSelectedToken();
+            throw new RuleException("cannot place token there");
         }
         takeSelectedToken();
         if (noMoreTokens()) {

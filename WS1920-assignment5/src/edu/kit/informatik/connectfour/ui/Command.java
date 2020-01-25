@@ -23,7 +23,7 @@ public enum Command {
     SELECT("select") {
         @Override
         String executeIntern(String argument, Game game) throws ParseException, RuleException {
-            game.take(parseToken(trimSpace(argument)));
+            game.place(parseToken(trimSpace(argument)));
             return OK;
         }
     },

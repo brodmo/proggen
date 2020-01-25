@@ -38,10 +38,12 @@ public abstract class Board {
         return availableMap;
     }
 
-    // returns true if placement allowed
+    // returns false if placement not allowed
     public boolean place(Position pos, Token token) throws RuleException {
         Position transformed = transform(pos);
-        checkPos(transformed);
+        if (!posValid(transformed)) {
+            return false;
+        }
         Field fld = get(transformed);
         if (!fld.isEmpty()) {
             return false;
@@ -139,15 +141,14 @@ public abstract class Board {
         return coord >= 0 && coord < BOARD_SIZE;
     }
 
+    private boolean posValid(Position pos) {
+        return coordinateValid(pos.row()) && coordinateValid(pos.col());
+    }
+
     private void checkCoordinate(int coord) throws RuleException {
         if (!coordinateValid(coord)) {
             throw new RuleException("invalid coordinate(s)");
         }
-    }
-
-    private void checkPos(Position pos) throws RuleException {
-        checkCoordinate(pos.row());
-        checkCoordinate(pos.col());
     }
 
     private final class BoardLine implements Iterable<Position> {
