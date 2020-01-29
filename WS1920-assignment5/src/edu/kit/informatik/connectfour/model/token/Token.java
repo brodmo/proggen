@@ -24,6 +24,10 @@ public class Token {
         return Integer.toString(attributesToNumber(attributes));
     }
 
+    public int toInt() {
+        return attributesToNumber(attributes);
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(attributes);
