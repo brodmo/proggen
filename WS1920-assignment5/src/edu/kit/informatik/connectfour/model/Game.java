@@ -5,7 +5,10 @@ import edu.kit.informatik.connectfour.model.board.Position;
 import edu.kit.informatik.connectfour.model.token.Token;
 import edu.kit.informatik.connectfour.util.StringUtil;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class Game {
 
@@ -96,14 +99,9 @@ public class Game {
     }
 
     public String getAvailable() {
-        List<Integer> tokenInts = new ArrayList<>();
+        Set<String> tokenStrings = new HashSet<>();
         for (Token tkn: getAvailableIntern()) {
-            tokenInts.add(tkn.toInt());
-        }
-        Collections.sort(tokenInts);
-        List<String> tokenStrings = new ArrayList<>();
-        for (int i: tokenInts) {
-            tokenStrings.add(Integer.toString(i));
+            tokenStrings.add(tkn.toString());
         }
         return StringUtil.join(tokenStrings);
     }
