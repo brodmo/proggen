@@ -99,7 +99,7 @@ public class Game {
 
     public String getAvailable() {
         Set<String> tokenStrings = new HashSet<>();
-        for (Token tkn: getAvailableIntern()) {
+        for (Token tkn : getAvailableIntern()) {
             tokenStrings.add(tkn.toString());
         }
         return String.join(" ", tokenStrings);
@@ -107,7 +107,7 @@ public class Game {
 
     private Set<Token> getAvailableIntern() {
         Set<Token> available = new HashSet<>();
-        for (Token tkn: availableTokens.keySet()) {
+        for (Token tkn : availableTokens.keySet()) {
             if (availableTokens.get(tkn) > 0) {
                 available.add(tkn);
             }
@@ -132,7 +132,7 @@ public class Game {
     }
 
     private boolean noMoreTokens() {
-        for (int i: availableTokens.values()) {
+        for (int i : availableTokens.values()) {
             if (i > 0) {
                 return false;
             }

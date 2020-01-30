@@ -99,7 +99,7 @@ public enum Command {
     }
 
     public static Command matchCommand(String command) throws ParseException {
-        for (Command cmd: Command.values()) {
+        for (Command cmd : Command.values()) {
             if (cmd.toString().equals(command)) {
                 return cmd;
             }

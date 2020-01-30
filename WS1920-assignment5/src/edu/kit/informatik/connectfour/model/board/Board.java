@@ -72,7 +72,7 @@ public abstract class Board {
     public boolean winningState() {
         int boundsOffset = getBoundsOffset();
         for (int i = -boundsOffset; i < BOARD_SIZE + boundsOffset; i++) {
-            for (BoardLine line: getLinesToCheck(i)) {
+            for (BoardLine line : getLinesToCheck(i)) {
                 if (checkLine(line)) {
                     return true;
                 }
@@ -108,7 +108,7 @@ public abstract class Board {
 
     private boolean checkLine(BoardLine line) {
         Queue<Field> lastFields = new LinkedList<>();
-        for (Position pos: line) {
+        for (Position pos : line) {
             lastFields.add(get(transform(pos)));
             if (lastFields.size() >= NEEDED_TO_WIN) {
                 if (shareAttribute(lastFields)) {
@@ -126,7 +126,7 @@ public abstract class Board {
         Queue<Field> fieldsCopy = new LinkedList<>(fields);
         Set<AttributeValue> commonAttributes = new HashSet<>(
                 fieldsCopy.remove().getAttributesOfToken());
-        for (Field fld: fieldsCopy) {
+        for (Field fld : fieldsCopy) {
             commonAttributes.retainAll(fld.getAttributesOfToken());
         }
         return !commonAttributes.isEmpty();
