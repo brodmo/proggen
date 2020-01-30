@@ -7,8 +7,8 @@ class TorusBoard extends Board {
         return new Position(transform(pos.row()), transform(pos.col()));
     }
 
-    private int transform(int i) {
-        return ((i % BOARD_SIZE) + BOARD_SIZE) % BOARD_SIZE;
+    private int transform(int coord) {
+        return ((coord % BOARD_SIZE) + BOARD_SIZE) % BOARD_SIZE;
     }
 
     @Override
