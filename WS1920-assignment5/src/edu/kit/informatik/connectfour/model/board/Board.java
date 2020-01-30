@@ -3,7 +3,6 @@ package edu.kit.informatik.connectfour.model.board;
 import edu.kit.informatik.connectfour.model.RuleException;
 import edu.kit.informatik.connectfour.model.token.AttributeValue;
 import edu.kit.informatik.connectfour.model.token.Token;
-import edu.kit.informatik.connectfour.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,7 +57,7 @@ public abstract class Board {
         for (int col = 0; col < BOARD_SIZE; col++) {
             rowStrings.add(board[row][col].toString());
         }
-        return StringUtil.join(rowStrings);
+        return String.join(" ", rowStrings);
     }
 
     public String colToString(int col) throws RuleException {
@@ -67,7 +66,7 @@ public abstract class Board {
         for (int row = 0; row < BOARD_SIZE; row++) {
             colStrings.add(board[row][col].toString());
         }
-        return StringUtil.join(colStrings);
+        return String.join(" ", colStrings);
     }
 
     public boolean winningState() {

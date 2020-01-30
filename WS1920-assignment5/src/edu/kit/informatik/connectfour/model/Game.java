@@ -3,7 +3,6 @@ package edu.kit.informatik.connectfour.model;
 import edu.kit.informatik.connectfour.model.board.Board;
 import edu.kit.informatik.connectfour.model.board.Position;
 import edu.kit.informatik.connectfour.model.token.Token;
-import edu.kit.informatik.connectfour.util.StringUtil;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -103,7 +102,7 @@ public class Game {
         for (Token tkn: getAvailableIntern()) {
             tokenStrings.add(tkn.toString());
         }
-        return StringUtil.join(tokenStrings);
+        return String.join(" ", tokenStrings);
     }
 
     private Set<Token> getAvailableIntern() {
