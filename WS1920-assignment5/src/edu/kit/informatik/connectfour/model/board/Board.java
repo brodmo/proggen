@@ -38,7 +38,7 @@ public abstract class Board {
     }
 
     // returns false if placement not allowed
-    public boolean place(Position pos, Token token) throws RuleException {
+    public boolean place(Position pos, Token token) {
         Position transformed = transform(pos);
         if (!posValid(transformed)) {
             return false;
@@ -165,8 +165,8 @@ public abstract class Board {
         @Override
         public Iterator<Position> iterator() {
             return new Iterator<Position>() {
-                int row = startPosition.row();
-                int col = startPosition.col();
+                private int row = startPosition.row();
+                private int col = startPosition.col();
 
 
                 @Override
