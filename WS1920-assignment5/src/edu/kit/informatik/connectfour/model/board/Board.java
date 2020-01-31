@@ -15,13 +15,27 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
+/**
+ * The type Board.
+ * @author The Nipster
+ * @version 69.420
+ */
 public abstract class Board {
 
+    /**
+     * The constant BOARD_SIZE.
+     */
     public static final int BOARD_SIZE = 6; // assumes quadratic board
+    /**
+     * The constant NEEDED_TO_WIN.
+     */
     public static final int NEEDED_TO_WIN = 4;
 
     private Field[][] board = new Field[BOARD_SIZE][BOARD_SIZE];
 
+    /**
+     * Instantiates a new Board.
+     */
     Board() {
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
@@ -30,6 +44,11 @@ public abstract class Board {
         }
     }
 
+    /**
+     * Gets available boards.
+     *
+     * @return the available boards
+     */
     public static Map<String, Board> getAvailableBoards() {
         Map<String, Board> availableMap = new HashMap<>();
         availableMap.put("standard", new StandardBoard());
@@ -37,7 +56,13 @@ public abstract class Board {
         return availableMap;
     }
 
-    // returns false if placement not allowed
+    /**
+     * Place boolean.
+     *
+     * @param pos   the pos
+     * @param token the token
+     * @return returns false if placement not allowed
+     */
     public boolean place(Position pos, Token token) {
         Position transformed = transform(pos);
         if (!posValid(transformed)) {
@@ -51,6 +76,13 @@ public abstract class Board {
         return true;
     }
 
+    /**
+     * Row to string string.
+     *
+     * @param row the row
+     * @return the string
+     * @throws RuleException the rule exception
+     */
     public String rowToString(int row) throws RuleException {
         checkCoordinate(row);
         List<String> rowStrings = new ArrayList<>();
@@ -60,6 +92,13 @@ public abstract class Board {
         return String.join(" ", rowStrings);
     }
 
+    /**
+     * Col to string string.
+     *
+     * @param col the col
+     * @return the string
+     * @throws RuleException the rule exception
+     */
     public String colToString(int col) throws RuleException {
         checkCoordinate(col);
         List<String> colStrings = new ArrayList<>();
@@ -69,6 +108,11 @@ public abstract class Board {
         return String.join(" ", colStrings);
     }
 
+    /**
+     * Winning state boolean.
+     *
+     * @return the boolean
+     */
     public boolean winningState() {
         int boundsOffset = getBoundsOffset();
         for (int i = -boundsOffset; i < BOARD_SIZE + boundsOffset; i++) {
@@ -81,8 +125,19 @@ public abstract class Board {
         return false;
     }
 
+    /**
+     * Transform position.
+     *
+     * @param pos the pos
+     * @return the position
+     */
     abstract Position transform(Position pos);
 
+    /**
+     * Gets bounds offset.
+     *
+     * @return the bounds offset
+     */
     abstract int getBoundsOffset();
 
     private Set<BoardLine> getLinesToCheck(int i) {

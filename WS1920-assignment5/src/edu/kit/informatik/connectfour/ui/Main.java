@@ -13,10 +13,20 @@ place 2;5
 
 */
 
+/**
+ * The type Main.
+ * @author The Nipster
+ * @version 69.420
+ */
 public final class Main {
 
     private Main() { }
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         new Runner().run();
     }

@@ -1,5 +1,10 @@
 package edu.kit.informatik.connectfour.model.board;
 
+/**
+ * The type Torus board.
+ * @author The Nipster
+ * @version 69.420
+ */
 class TorusBoard extends Board {
 
     @Override

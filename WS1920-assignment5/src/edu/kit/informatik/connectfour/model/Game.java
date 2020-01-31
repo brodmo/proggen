@@ -9,8 +9,16 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * The type Game.
+ * @author The Nipster
+ * @version 69.420
+ */
 public class Game {
 
+    /**
+     * The constant NUMBER_OF_TOKENS.
+     */
     public static final int NUMBER_OF_TOKENS = 16;
 
     private Board board;
@@ -21,10 +29,16 @@ public class Game {
     private boolean finished;
     private boolean outOfTokens;
 
+    /**
+     * Instantiates a new Game.
+     */
     public Game() {
         reset();
     }
 
+    /**
+     * Reset.
+     */
     public void reset() {
         // your responsibility if board is not set and you call a method that needs it ¯\_(ツ)_/¯
         board = null;
@@ -39,26 +53,57 @@ public class Game {
         }
     }
 
+    /**
+     * Gets player who placed.
+     *
+     * @return the player who placed
+     */
     public int getPlayerWhoPlaced() {
         return playerWhoPlaced;
     }
 
+    /**
+     * Gets counter.
+     *
+     * @return the counter
+     */
     public int getCounter() {
         return counter;
     }
 
+    /**
+     * Out of tokens boolean.
+     *
+     * @return the boolean
+     */
     public boolean outOfTokens() {
         return outOfTokens;
     }
 
+    /**
+     * Board set boolean.
+     *
+     * @return the boolean
+     */
     public boolean boardSet() {
         return board != null;
     }
 
+    /**
+     * Sets board.
+     *
+     * @param board the board
+     */
     public void setBoard(Board board) {
         this.board = board;
     }
 
+    /**
+     * Place.
+     *
+     * @param token the token
+     * @throws RuleException the rule exception
+     */
     public void place(Token token) throws RuleException {
         checkFinished();
         if (tokenSelected()) {
@@ -72,7 +117,14 @@ public class Game {
         selectedToken = token;
     }
 
-    // returns true on win
+    /**
+     * Place boolean.
+     *
+     * @param pos the pos
+     * @return the boolean
+     * @throws RuleException the rule exception
+     */
+// returns true on win
     public boolean place(Position pos) throws RuleException {
         checkFinished();
         if (!tokenSelected()) {
@@ -97,6 +149,11 @@ public class Game {
         return won;
     }
 
+    /**
+     * Gets available.
+     *
+     * @return the available
+     */
     public String getAvailable() {
         Set<String> tokenStrings = new HashSet<>();
         for (Token tkn : getAvailableIntern()) {
@@ -115,10 +172,24 @@ public class Game {
         return available;
     }
 
+    /**
+     * Row to string string.
+     *
+     * @param row the row
+     * @return the string
+     * @throws RuleException the rule exception
+     */
     public String rowToString(int row) throws RuleException {
         return board.rowToString(row);
     }
 
+    /**
+     * Col to string string.
+     *
+     * @param col the col
+     * @return the string
+     * @throws RuleException the rule exception
+     */
     public String colToString(int col) throws RuleException {
         return board.colToString(col);
     }

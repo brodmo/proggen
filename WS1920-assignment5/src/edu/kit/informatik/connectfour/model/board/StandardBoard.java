@@ -1,5 +1,10 @@
 package edu.kit.informatik.connectfour.model.board;
 
+/**
+ * The type Standard board.
+ * @author The Nipster
+ * @version 69.420
+ */
 class StandardBoard extends Board {
 
     @Override

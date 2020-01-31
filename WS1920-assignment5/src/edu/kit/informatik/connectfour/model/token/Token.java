@@ -4,24 +4,36 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 
-import static edu.kit.informatik.connectfour.model.token.AttributeValue.attributesToNumber;
-import static edu.kit.informatik.connectfour.model.token.AttributeValue.getAttributes;
-
+/**
+ * The type Token.
+ * @author The Nipster
+ * @version 69.420
+ */
 public class Token {
 
     private Set<AttributeValue> attributes;
 
+    /**
+     * Instantiates a new Token.
+     *
+     * @param number the number
+     */
     public Token(int number) {
-        this.attributes = getAttributes(number);
+        this.attributes = AttributeValue.getAttributes(number);
     }
 
+    /**
+     * Attributes set.
+     *
+     * @return the set
+     */
     public Set<AttributeValue> attributes() {
         return Collections.unmodifiableSet(attributes);
     }
 
     @Override
     public String toString() {
-        return Integer.toString(attributesToNumber(attributes));
+        return Integer.toString(AttributeValue.attributesToNumber(attributes));
     }
 
     @Override
