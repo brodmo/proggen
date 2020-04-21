@@ -4,19 +4,12 @@ import edu.kit.informatik.Terminal;
 import edu.kit.informatik.connectfour.model.Game;
 import edu.kit.informatik.connectfour.model.RuleException;
 
+import static edu.kit.informatik.connectfour.ui.Command.NOTHING;
 
-/**
- * The type Runner.
- * @author The Nipster
- * @version 69.420
- */
 class Runner {
 
     private Game game = new Game();
 
-    /**
-     * Run.
-     */
     void run() {
         boolean over = false;
         do {
@@ -40,7 +33,7 @@ class Runner {
         Command command = Command.matchCommand(commandStr);
         String argument = input.substring(commandStr.length());
         String output = command.execute(argument, game);
-        if (!output.equals(Command.NOTHING)) {
+        if (!output.equals(NOTHING)) {
             Terminal.printLine(output);
         }
         return command == Command.QUIT;

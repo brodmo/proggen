@@ -8,15 +8,9 @@ import edu.kit.informatik.connectfour.model.token.Token;
 
 import java.util.Map;
 
-/**
- * The enum Command.
- * @author The Nipster
- * @version 69.420
- */
+import static edu.kit.informatik.connectfour.model.Game.NUMBER_OF_TOKENS;
+
 public enum Command {
-    /**
-     * The Start.
-     */
     START("start", false) {
         @Override
         String executeIntern(String argument, Game game) throws ParseException {
@@ -26,9 +20,6 @@ public enum Command {
             return OK;
         }
     },
-    /**
-     * The Select.
-     */
     SELECT("select") {
         @Override
         String executeIntern(String argument, Game game) throws ParseException, RuleException {
@@ -36,9 +27,6 @@ public enum Command {
             return OK;
         }
     },
-    /**
-     * The Place.
-     */
     PLACE("place") {
         @Override
         String executeIntern(String argument, Game game) throws ParseException, RuleException {
@@ -52,9 +40,6 @@ public enum Command {
             }
         }
     },
-    /**
-     * The Bag.
-     */
     BAG("bag") {
         @Override
         String executeIntern(String argument, Game game) throws ParseException {
@@ -62,27 +47,18 @@ public enum Command {
             return game.getAvailable();
         }
     },
-    /**
-     * The Print row.
-     */
     PRINT_ROW("rowprint") {
         @Override
         String executeIntern(String argument, Game game) throws ParseException, RuleException {
             return game.rowToString(parseInt(trimSpace(argument)));
         }
     },
-    /**
-     * The Print col.
-     */
     PRINT_COL("colprint") {
         @Override
         String executeIntern(String argument, Game game) throws ParseException, RuleException {
             return game.colToString(parseInt(trimSpace(argument)));
         }
     },
-    /**
-     * The Quit.
-     */
     QUIT("quit", false) {
         @Override
         String executeIntern(String argument, Game game) throws ParseException {
@@ -91,61 +67,25 @@ public enum Command {
         }
     };
 
-    /**
-     * The constant COORDINATE_SEPARATOR.
-     */
     public static final String COORDINATE_SEPARATOR = ";";
-    /**
-     * The constant OK.
-     */
     public static final String OK = "OK";
-    /**
-     * The constant NOTHING.
-     */
     public static final String NOTHING = "";
 
     private String string;
     private boolean boardHasToBeSet;
 
-    /**
-     * Instantiates a new command.
-     * @param string the string
-     */
     Command(String string) {
         this.string = string;
         this.boardHasToBeSet = true; // since this is the "default" behavior for a command
     }
 
-    /**
-     * Instantiates a new command.
-     * @param string the string
-     * @param boardHasToBeSet the boardHasToBeSet
-     */
     Command(String string, boolean boardHasToBeSet) {
         this.string = string;
         this.boardHasToBeSet = boardHasToBeSet;
     }
 
-    /**
-     * Execute intern string.
-     *
-     * @param argument the argument
-     * @param game     the game
-     * @return the string
-     * @throws ParseException the parse exception
-     * @throws RuleException  the rule exception
-     */
     abstract String executeIntern(String argument, Game game) throws ParseException, RuleException;
 
-    /**
-     * Execute string.
-     *
-     * @param argument the argument
-     * @param game     the game
-     * @return the string
-     * @throws ParseException the parse exception
-     * @throws RuleException  the rule exception
-     */
     final String execute(String argument, Game game) throws ParseException, RuleException {
         if (boardHasToBeSet && !game.boardSet()) {
             throw new RuleException("you have to start the game and set a board type first!");
@@ -158,13 +98,6 @@ public enum Command {
         return string;
     }
 
-    /**
-     * Match command command.
-     *
-     * @param command the command
-     * @return the command
-     * @throws ParseException the parse exception
-     */
     public static Command matchCommand(String command) throws ParseException {
         for (Command cmd : Command.values()) {
             if (cmd.toString().equals(command)) {
@@ -208,7 +141,7 @@ public enum Command {
         } catch (NumberFormatException e) {
             throw new ParseException("could not parse number describing token");
         }
-        if (number < 0 || number >= Game.NUMBER_OF_TOKENS) {
+        if (number < 0 || number >= NUMBER_OF_TOKENS) {
             throw new ParseException("invalid number describing token");
         }
         return new Token(number);
